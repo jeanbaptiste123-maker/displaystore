@@ -1,0 +1,117 @@
+<!-- Footer (included in every page) -->
+<style>
+.footer {
+    position: relative;
+    background: linear-gradient(135deg, rgba(26, 29, 32, 0.98), rgba(15, 17, 20, 0.98));
+    color: #ffffff;
+    padding: 50px 0 20px;
+    margin-top: auto;
+    backdrop-filter: blur(10px);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+.footer::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #0b5ed7, #00d4ff, #ffdd00);
+}
+.footer h6 {
+    font-weight: 700;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+    color: #00d4ff;
+}
+.footer a {
+    color: #adb5bd;
+    text-decoration: none;
+    transition: 0.3s;
+}
+.footer a:hover {
+    color: #00d4ff;
+    transform: translateX(5px);
+}
+.social-icons a {
+    font-size: 1.2rem;
+    margin-right: 15px;
+    color: #ffffff;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 8px 12px;
+    border-radius: 50%;
+    display: inline-block;
+    transition: all 0.3s;
+}
+.social-icons a:hover {
+    background: linear-gradient(135deg, #0b5ed7, #00d4ff);
+    transform: translateY(-3px);
+}
+.contact-item i {
+    margin-right: 10px;
+    color: #00d4ff;
+}
+.copyright-bar {
+    background-color: rgba(0, 0, 0, 0.5);
+    padding: 15px 0;
+    text-align: center;
+    font-size: 0.9rem;
+    color: #6c757d;
+}
+</style>
+<footer class="footer">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-4 mb-4">
+                <a href="{% url 'home' %}" class="footer-logo d-block mb-3" style="font-size: 1.5rem; font-weight: 800; color: #ffdd00; text-decoration: none;">🛒 displaystore</a>
+                <p>Rwanda's premier online marketplace for premium laptop, smartphone, tablet, and desktop screens.</p>
+                <div class="social-icons">
+                    <a href="https://www.facebook.com/IsokoMarket" target="_blank" aria-label="Facebook"><i class="bi bi-facebook"></i></a>
+                    <a href="https://www.instagram.com/IsokoMarket" target="_blank" aria-label="Instagram"><i class="bi bi-instagram"></i></a>
+                    <a href="https://twitter.com/IsokoMarket" target="_blank" aria-label="Twitter"><i class="bi bi-twitter"></i></a>
+                    <a href="https://wa.me/250780426005" target="_blank" aria-label="WhatsApp"><i class="bi bi-whatsapp"></i></a>
+                </div>
+            </div>
+            <div class="col-lg-3 col-6 mb-4">
+                <h6>Quick Links</h6>
+                <ul class="list-unstyled">
+                    <li><a href="{% url 'home' %}">🏠 Home</a></li>
+                    <li><a href="{% url 'about_us' %}">📖 About Us</a></li>
+                    <li><a href="{% url 'contact' %}">📞 Contact</a></li>
+                    <li><a href="{% url 'view_cart' %}">🛒 Cart</a></li>
+                </ul>
+            </div>
+            <div class="col-lg-2 col-6 mb-4">
+                <h6>My Account</h6>
+                <ul class="list-unstyled">
+                    <li><a href="{% url 'profile' %}">👤 Profile</a></li>
+                    <li><a href="#">📦 Orders</a></li>
+                    <li><a href="#">❤️ Wishlist</a></li>
+                    <li><a href="#">⚙️ Settings</a></li>
+                </ul>
+            </div>
+            <div class="col-lg-3 mb-4">
+                <h6>Contact Us</h6>
+                <ul class="list-unstyled contact-item">
+                    <li><i class="bi bi-geo-alt"></i> KG 123 St, Kigali, Rwanda</li>
+                    <li><i class="bi bi-telephone"></i> <a href="https://wa.me/250780426005">+250 780 426 005</a></li>
+                    <li><i class="bi bi-envelope"></i> <a href="mailto:support@displaystore.com">support@displaystore.com</a></li>
+                    <li><i class="bi bi-clock"></i> Mon–Sat: 6:00 AM – 10:00 PM<br>Sun: 8:00 AM – 8:00 PM</li>
+                </ul>
+            </div>
+        </div>
+        <div class="row mt-4">
+            <div class="col-12 text-center">
+                <h6>Secure Payments</h6>
+                <div class="mt-2">
+                    <i class="bi bi-credit-card" style="font-size: 1.8rem; margin: 0 10px; opacity: 0.7;"></i>
+                    <i class="bi bi-paypal" style="font-size: 1.8rem; margin: 0 10px; opacity: 0.7;"></i>
+                    <i class="bi bi-shield-lock" style="font-size: 1.8rem; margin: 0 10px; opacity: 0.7;"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="copyright-bar">
+        <p class="mb-0">© 2026 displaystore - All rights reserved | Made with ❤️ in Rwanda</p>
+    </div>
+</footer>

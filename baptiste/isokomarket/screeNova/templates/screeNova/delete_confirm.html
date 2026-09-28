@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Confirm Delete | IsokoMarket</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="container mt-5" style="max-width: 700px;">
+    <h2 class="mb-4">Confirm Delete</h2>
+
+    <div class="alert alert-warning">
+        Are you sure you want to delete <strong>{{ product.name }}</strong>? This action cannot be undone.
+    </div>
+
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger">Yes, delete</button>
+        <a class="btn btn-secondary" href="{% url 'seller_dashboard' %}">Cancel</a>
+    </form>
+</div>
+
+{% include 'screeNova/footer.html' %}
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,660 @@
+<!-- store/payment.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Select Payment Method - DisplayStore</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <style>
+        /* ========== SAME BACKGROUND AS HOME PAGE (ONLY THIS CHANGED) ========== */
+        body { 
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            background: #0a0a0a;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            padding: 20px 0;
+        }
+        
+        /* Screen/Technology Background Image - SAME AS HOME */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: url('https://images.unsplash.com/photo-1587831990711-23ca6441447b?w=1600&q=80');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            opacity: 0.4;
+            z-index: -1;
+            pointer-events: none;
+        }
+        
+        /* Dark overlay - SAME AS HOME */
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(10, 10, 10, 0.6) 0%, rgba(30, 30, 30, 0.7) 100%);
+            z-index: -1;
+            pointer-events: none;
+        }
+        
+        /* Payment Container - Glass effect matching home page */
+        .payment-container { 
+            max-width: 600px; 
+            margin: 50px auto; 
+            background: rgba(30, 30, 40, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 30px; 
+            border-radius: 20px; 
+            box-shadow: 0 25px 50px rgba(0,0,0,0.3);
+            position: relative;
+            z-index: 1;
+            border: 1px solid rgba(255,255,255,0.15);
+            animation: fadeInUp 0.6s ease-out;
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .payment-container h2 { 
+            text-align: center; 
+            margin-bottom: 30px; 
+            color: white;
+            font-weight: 700;
+            position: relative;
+            padding-bottom: 15px;
+        }
+        
+        .payment-container h2:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 3px;
+            background: linear-gradient(135deg, var(--primary, #0b5ed7), var(--accent, #00d4ff));
+            border-radius: 3px;
+        }
+        
+        .form-check-label { 
+            font-weight: 500; 
+            margin-left: 8px; 
+            color: rgba(255,255,255,0.9);
+        }
+        
+        .payment-details { 
+            display: none; 
+            margin-top: 20px; 
+            padding: 20px; 
+            border: 1px solid rgba(255,255,255,0.2); 
+            border-radius: 12px; 
+            background: rgba(0,0,0,0.3); 
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        }
+        
+        .payment-details h5 { 
+            margin-bottom: 15px; 
+            color: white;
+            font-weight: 600;
+        }
+        
+        .payment-details label {
+            color: rgba(255,255,255,0.9);
+        }
+        
+        .btn-success { 
+            width: 100%; 
+            padding: 14px; 
+            font-size: 18px; 
+            border-radius: 10px; 
+            transition: all 0.3s;
+            background: linear-gradient(135deg, #28a745, #20c997);
+            border: none;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+        
+        .btn-success:hover { 
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(40, 167, 69, 0.4);
+            background: linear-gradient(135deg, #20c997, #28a745);
+        }
+        
+        .btn-success:disabled {
+            opacity: 0.6;
+            transform: none;
+        }
+        
+        label { 
+            font-weight: 600; 
+            color: rgba(255,255,255,0.9);
+        }
+        
+        .total-box { 
+            text-align: right; 
+            font-size: 28px; 
+            font-weight: bold; 
+            margin-top: 20px; 
+            padding: 15px;
+            background: rgba(0,0,0,0.4);
+            border-radius: 12px;
+            color: #2ecc71;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .buyer-info { 
+            background: rgba(0,0,0,0.3);
+            padding: 25px; 
+            border-radius: 15px; 
+            margin-bottom: 25px; 
+            border: 1px solid rgba(255,255,255,0.1);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .buyer-info h4 { 
+            color: white; 
+            margin-bottom: 20px; 
+            font-size: 1.3rem;
+            font-weight: 700;
+        }
+        
+        .required-field::after { 
+            content: " *"; 
+            color: #dc3545; 
+            font-weight: bold;
+        }
+        
+        .alert-info { 
+            background: rgba(0, 212, 255, 0.2);
+            border-color: #00d4ff; 
+            color: #00d4ff;
+            border-radius: 12px;
+            border-left: 4px solid #00d4ff;
+            font-weight: 500;
+        }
+        
+        /* Bank transfer specific styling */
+        .bank-transfer-info {
+            background: rgba(255,152,0,0.15);
+            border-left: 4px solid #ff9800;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 15px;
+        }
+        
+        .bank-transfer-info p {
+            margin-bottom: 8px;
+            color: rgba(255,255,255,0.8);
+        }
+        
+        .bank-transfer-info i {
+            color: #ff9800;
+            margin-right: 8px;
+        }
+        
+        /* Form control styling */
+        .form-control {
+            border-radius: 10px;
+            border: 1px solid rgba(255,255,255,0.2);
+            transition: all 0.3s;
+            padding: 10px 15px;
+            background: rgba(255,255,255,0.1);
+            color: white;
+        }
+        
+        .form-control:focus {
+            border-color: #00d4ff;
+            box-shadow: 0 0 0 0.2rem rgba(0,212,255,0.25);
+            background: rgba(255,255,255,0.15);
+            color: white;
+        }
+        
+        .form-control::placeholder {
+            color: rgba(255,255,255,0.5);
+        }
+        
+        .form-text {
+            color: rgba(255,255,255,0.6);
+        }
+        
+        /* Radio button styling */
+        .form-check-input {
+            cursor: pointer;
+            background-color: rgba(255,255,255,0.1);
+            border-color: rgba(255,255,255,0.3);
+        }
+        
+        .form-check-input:checked {
+            background-color: #00d4ff;
+            border-color: #00d4ff;
+        }
+        
+        /* Section headers */
+        h4 i {
+            color: #00d4ff;
+            margin-right: 10px;
+        }
+        
+        /* Invalid field styling */
+        .is-invalid {
+            border-color: #dc3545;
+            background-color: rgba(220,53,69,0.1);
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .payment-container {
+                margin: 20px 15px;
+                padding: 20px;
+            }
+            
+            .total-box {
+                font-size: 22px;
+            }
+        }
+        
+        /* Animation for payment details */
+        .payment-details {
+            animation: slideDown 0.3s ease-in-out;
+        }
+        
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* Card styling for payment options */
+        .form-check {
+            padding: 12px;
+            border-radius: 10px;
+            transition: all 0.3s;
+            margin-bottom: 8px;
+        }
+        
+        .form-check:hover {
+            background-color: rgba(255,255,255,0.05);
+            transform: translateX(5px);
+        }
+        
+        /* Cash on Delivery special styling */
+        #codDetails {
+            background: rgba(76,175,80,0.15) !important;
+            border-left: 4px solid #4caf50;
+        }
+        
+        /* Bank Transfer special styling */
+        #bankTransferDetails {
+            background: rgba(255,152,0,0.15) !important;
+            border-left: 4px solid #ff9800;
+        }
+        
+        /* Credit Card special styling */
+        #creditCardDetails {
+            background: rgba(33,150,243,0.15) !important;
+            border-left: 4px solid #2196f3;
+        }
+        
+        /* Mobile Money special styling */
+        #mobileMoneyDetails {
+            background: rgba(156,39,176,0.15) !important;
+            border-left: 4px solid #9c27b0;
+        }
+        
+        /* Loading animation for button */
+        .btn-success.loading {
+            pointer-events: none;
+            opacity: 0.7;
+        }
+        
+        .btn-success.loading:after {
+            content: '';
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            margin-left: 10px;
+            border: 2px solid white;
+            border-radius: 50%;
+            border-top-color: transparent;
+            animation: spin 0.6s linear infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        /* Badge styling */
+        .secure-badge {
+            text-align: center;
+            margin-top: 20px;
+            color: rgba(255,255,255,0.6);
+            font-size: 12px;
+        }
+        
+        .secure-badge i {
+            color: #28a745;
+            margin-right: 5px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="payment-container">
+    <h2><i class="bi bi-lock-fill"></i> Secure Checkout</h2>
+    
+    <div class="alert alert-info">
+        <i class="bi bi-info-circle-fill"></i> Please provide your delivery details before selecting payment method
+    </div>
+
+    <form method="POST" action="{% url 'payment_selection' %}" id="paymentForm">
+        {% csrf_token %}
+
+        <!-- Buyer Information Section -->
+        <div class="buyer-info">
+            <h4><i class="bi bi-person-circle"></i> Buyer Information</h4>
+            <div class="mb-3">
+                <label class="form-label required-field">Full Name</label>
+                <input type="text" 
+                       name="buyer_fullname" 
+                       class="form-control" 
+                       placeholder="Enter your full name" 
+                       required
+                       pattern="[A-Za-z\s]{2,}"
+                       title="Please enter a valid name (minimum 2 characters, letters only)">
+                <div class="form-text">Enter your complete name as it appears on ID</div>
+            </div>
+            
+            <div class="mb-3">
+                <label class="form-label required-field">Delivery Location</label>
+                <textarea 
+                    name="delivery_location" 
+                    class="form-control" 
+                    rows="3" 
+                    placeholder="Enter complete delivery address (street, building, landmark, etc.)"
+                    required
+                    minlength="10"
+                ></textarea>
+                <div class="form-text">Provide detailed address for accurate delivery</div>
+            </div>
+            
+            <div class="mb-3">
+                <label class="form-label">Contact Phone (Optional)</label>
+                <input type="tel" 
+                       name="contact_phone" 
+                       class="form-control" 
+                       placeholder="e.g. 078XXXXXXX"
+                       pattern="[0-9]{10}"
+                       title="Please enter a valid 10-digit phone number">
+                <div class="form-text">For delivery coordination if different from payment phone</div>
+            </div>
+            
+            <div class="mb-3">
+                <label class="form-label">Delivery Instructions (Optional)</label>
+                <textarea 
+                    name="delivery_instructions" 
+                    class="form-control" 
+                    rows="2" 
+                    placeholder="Special instructions for delivery (e.g., call upon arrival, leave with security, etc.)"
+                ></textarea>
+            </div>
+        </div>
+
+        <!-- Payment Method Section -->
+        <h4><i class="bi bi-credit-card-2-front"></i> Payment Method</h4>
+        <div class="mb-3">
+            <label class="form-label"><strong>Choose Payment Method:</strong></label><br>
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="payment_method" value="Credit Card" id="creditCardRadio" required>
+                <label class="form-check-label" for="creditCardRadio">💳 Credit Card</label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="payment_method" value="Mobile Money" id="mobileMoneyRadio" required>
+                <label class="form-check-label" for="mobileMoneyRadio">📱 Mobile Money</label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="payment_method" value="Bank Transfer" id="bankTransferRadio" required>
+                <label class="form-check-label" for="bankTransferRadio">🏦 Bank Transfer</label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="payment_method" value="Cash on Delivery" id="codRadio" required>
+                <label class="form-check-label" for="codRadio">💵 Cash on Delivery</label>
+            </div>
+        </div>
+
+        <!-- Credit Card Details -->
+        <div id="creditCardDetails" class="payment-details">
+            <h5>💳 Credit Card Information</h5>
+            <div class="mb-3">
+                <label>Cardholder Name</label>
+                <input type="text" name="cc_name" class="form-control" placeholder="Name on Card">
+            </div>
+            <div class="mb-3">
+                <label>Card Number</label>
+                <input type="text" name="cc_number" class="form-control" placeholder="XXXX-XXXX-XXXX-XXXX">
+            </div>
+            <div class="row">
+                <div class="col">
+                    <label>Expiry Date</label>
+                    <input type="text" name="cc_expiry" class="form-control" placeholder="MM/YY">
+                </div>
+                <div class="col">
+                    <label>CVV</label>
+                    <input type="password" name="cc_cvv" class="form-control" placeholder="XXX">
+                </div>
+            </div>
+           
+        </div>
+
+        <!-- Mobile Money Details -->
+        <div id="mobileMoneyDetails" class="payment-details">
+            <h5>📱 Mobile Money Information</h5>
+            <div class="mb-3">
+                <label>Full Name</label>
+                <input type="text" name="mm_name" class="form-control" placeholder="Your Name">
+            </div>
+            <div class="mb-3">
+                <label>Phone Number</label>
+                <input type="text" name="mm_phone" class="form-control" placeholder="e.g. 078XXXXXXX">
+            </div>
+           
+        </div>
+
+        <!-- Bank Transfer Details -->
+        <div id="bankTransferDetails" class="payment-details">
+            <h5>🏦 Bank Transfer Information</h5>
+            <div class="bank-transfer-info">
+                <p><i class="bi bi-building"></i> <strong>Bank Account Details:</strong></p>
+                <p><i class="bi bi-bank"></i> Bank Name: <strong>Equity Bank Rwanda</strong></p>
+                <p><i class="bi bi-person-badge"></i> Account Name: <strong>DisplayStore Ltd</strong></p>
+                <p><i class="bi bi-credit-card"></i> Account Number: <strong>1234567890</strong></p>
+                <p><i class="bi bi-globe"></i> SWIFT Code: <strong>EQBLRWRW</strong></p>
+                <hr>
+                <p><i class="bi bi-info-circle"></i> <strong>Instructions:</strong></p>
+                <ul class="small" style="color: rgba(255,255,255,0.8);">
+                    <li>Use your Order ID as reference when transferring</li>
+                    <li>Upload payment proof below</li>
+                    <li>Your order will be confirmed after payment verification</li>
+                </ul>
+            </div>
+            <div class="mb-3">
+                <label>Account Holder Name</label>
+                <input type="text" name="bank_account_name" class="form-control" placeholder="Enter your account name">
+            </div>
+            <div class="mb-3">
+                <label>Transaction Reference Number</label>
+                <input type="text" name="transaction_ref" class="form-control" placeholder="Enter transaction reference">
+            </div>
+            <div class="mb-3">
+                <label>Upload Payment Proof (Screenshot)</label>
+                <input type="file" name="payment_proof" class="form-control" accept="image/*,.pdf">
+                <div class="form-text">Upload screenshot or PDF of bank transfer confirmation</div>
+            </div>
+        </div>
+
+        <!-- Cash on Delivery Note -->
+        <div id="codDetails" class="payment-details">
+            <h5>💵 Cash on Delivery</h5>
+            <p class="mb-0" style="color: rgba(255,255,255,0.8);"><i class="bi bi-truck"></i> You'll pay when you receive your order at: <br>
+            <strong id="deliveryAddressPreview" style="color: white;"></strong></p>
+            <p class="mt-2 mb-0 small" style="color: rgba(255,255,255,0.6);">Please have exact change ready if possible.</p>
+        </div>
+
+        <div class="total-box">
+            <i class="bi bi-calculator"></i> Total: {{ total_price }} RWF
+        </div>
+        
+        <button type="submit" class="btn btn-success mt-3" id="payButton">
+            <i class="bi bi-shield-check"></i> Pay & Place Order
+        </button>
+        
+        <div class="secure-badge">
+            <i class="bi bi-shield-lock-fill"></i> 256-bit SSL Secure | <i class="bi bi-credit-card"></i> PCI Compliant
+        </div>
+    </form>
+</div>
+
+<script>
+    // Get references to DOM elements
+    const creditCardRadio = document.getElementById('creditCardRadio');
+    const mobileMoneyRadio = document.getElementById('mobileMoneyRadio');
+    const bankTransferRadio = document.getElementById('bankTransferRadio');
+    const codRadio = document.getElementById('codRadio');
+
+    const creditCardDetails = document.getElementById('creditCardDetails');
+    const mobileMoneyDetails = document.getElementById('mobileMoneyDetails');
+    const bankTransferDetails = document.getElementById('bankTransferDetails');
+    const codDetails = document.getElementById('codDetails');
+    const payButton = document.getElementById('payButton');
+    const paymentForm = document.getElementById('paymentForm');
+    
+    // Get buyer info fields for validation
+    const buyerFullname = document.querySelector('input[name="buyer_fullname"]');
+    const deliveryLocation = document.querySelector('textarea[name="delivery_location"]');
+    const deliveryAddressPreview = document.getElementById('deliveryAddressPreview');
+
+    function setSectionState(sectionElement, isVisible) {
+        if (sectionElement) {
+            sectionElement.style.display = isVisible ? 'block' : 'none';
+            sectionElement.querySelectorAll('input, select, textarea').forEach(el => {
+                if (isVisible && el.type !== 'file') {
+                    el.setAttribute('required', '');
+                } else {
+                    el.removeAttribute('required');
+                }
+                el.disabled = !isVisible;
+            });
+        }
+    }
+
+    function validateBuyerInfo() {
+        const isNameValid = buyerFullname && buyerFullname.value.trim().length >= 2;
+        const isAddressValid = deliveryLocation && deliveryLocation.value.trim().length >= 10;
+        
+        if (buyerFullname) {
+            if (buyerFullname.value.trim() && buyerFullname.value.trim().length < 2) {
+                buyerFullname.classList.add('is-invalid');
+            } else {
+                buyerFullname.classList.remove('is-invalid');
+            }
+        }
+        
+        if (deliveryLocation) {
+            if (deliveryLocation.value.trim() && deliveryLocation.value.trim().length < 10) {
+                deliveryLocation.classList.add('is-invalid');
+            } else {
+                deliveryLocation.classList.remove('is-invalid');
+            }
+        }
+        
+        return isNameValid && isAddressValid;
+    }
+
+    function updateUI() {
+        const showCredit = creditCardRadio.checked;
+        const showMobile = mobileMoneyRadio.checked;
+        const showBankTransfer = bankTransferRadio.checked;
+        const showCOD = codRadio.checked;
+
+        setSectionState(creditCardDetails, showCredit);
+        setSectionState(mobileMoneyDetails, showMobile);
+        setSectionState(bankTransferDetails, showBankTransfer);
+        setSectionState(codDetails, showCOD);
+
+        if (showCOD && deliveryLocation) {
+            deliveryAddressPreview.textContent = deliveryLocation.value.trim() || 'Not specified';
+        }
+
+        const isBuyerInfoValid = validateBuyerInfo();
+        payButton.disabled = !(isBuyerInfoValid && (showCredit || showMobile || showBankTransfer || showCOD));
+        
+        if (!isBuyerInfoValid) {
+            payButton.title = 'Please complete buyer information first';
+        } else {
+            payButton.title = '';
+        }
+    }
+
+    // Add loading animation on form submit
+    paymentForm.addEventListener('submit', function(e) {
+        if (!validateBuyerInfo()) {
+            e.preventDefault();
+            alert('Please complete all required buyer information fields:\n- Full Name (minimum 2 characters)\n- Delivery Location (minimum 10 characters)');
+            document.querySelector('.buyer-info').scrollIntoView({ behavior: 'smooth' });
+        } else {
+            payButton.classList.add('loading');
+            payButton.innerHTML = '<i class="bi bi-hourglass-split"></i> Processing...';
+        }
+    });
+
+    // Add real-time validation listeners
+    if (buyerFullname) {
+        buyerFullname.addEventListener('input', updateUI);
+    }
+    
+    if (deliveryLocation) {
+        deliveryLocation.addEventListener('input', function() {
+            updateUI();
+            if (codRadio.checked) {
+                deliveryAddressPreview.textContent = this.value.trim() || 'Not specified';
+            }
+        });
+    }
+
+    // Add radio button listeners
+    creditCardRadio.addEventListener('change', updateUI);
+    mobileMoneyRadio.addEventListener('change', updateUI);
+    bankTransferRadio.addEventListener('change', updateUI);
+    codRadio.addEventListener('change', updateUI);
+
+    // Initialize on page load
+    updateUI();
+</script>
+
+{% include 'screeNova/footer.html' %}
+
+</body>
+</html>

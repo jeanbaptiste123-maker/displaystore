@@ -1,0 +1,846 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="displaystore - Rwanda's premier online marketplace for buying and selling laptop screens, smartphone screens, tablets screens, and desktop screens">
+    <title>displaystore - Screen Marketplace</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+
+    <style>
+        :root {
+            --primary: #0b5ed7;
+            --primary-dark: #084298;
+            --primary-light: #3d8bf2;
+            --secondary: #ffdd00;
+            --accent: #00d4ff;
+            --dark: #1a1d20;
+            --gray-light: #f8f9fa;
+            --gray: #6c757d;
+            --hero-blue: rgba(11, 94, 215, 0.92);
+            --hero-blue-dark: rgba(8, 66, 152, 0.95);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            background: #0a0a0a;
+        }
+
+        /* Screen/Technology Background Image */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: url('https://images.unsplash.com/photo-1587831990711-23ca6441447b?w=1600&q=80');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            opacity: 0.4;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        /* Dark overlay */
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(10, 10, 10, 0.6) 0%, rgba(30, 30, 30, 0.7) 100%);
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        /* STICKY NAVBAR */
+        .navbar {
+            position: sticky !important;
+            top: 0 !important;
+            z-index: 10000 !important;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%) !important;
+            backdrop-filter: blur(10px);
+            width: 100%;
+        }
+
+        .navbar * {
+            pointer-events: auto !important;
+        }
+
+        .navbar-brand, 
+        .nav-link, 
+        .dropdown-toggle, 
+        .dropdown-item,
+        .btn,
+        .form-control,
+        .navbar-toggler {
+            pointer-events: auto !important;
+            cursor: pointer !important;
+        }
+
+        .dropdown-menu {
+            z-index: 10002 !important;
+            background: rgba(30, 30, 40, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .navbar-brand {
+            font-weight: 800;
+            color: var(--secondary) !important;
+            font-size: 1.5rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .nav-link {
+            color: #ffffff !important;
+            font-weight: 500;
+            transition: 0.3s;
+        }
+
+        .nav-link:hover {
+            color: var(--secondary) !important;
+            transform: translateY(-2px);
+        }
+
+        .dropdown-item {
+            color: white;
+        }
+
+        .dropdown-item:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        /* Hero Section */
+        .hero {
+            border-radius: 1rem;
+            padding: 3rem;
+            background: linear-gradient(135deg, var(--hero-blue), var(--hero-blue-dark));
+            color: #fff;
+            text-align: center;
+            animation: fadeInUp 0.8s ease-out;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255,255,255,0.3);
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .hero .btn-light {
+            background: white;
+            color: var(--primary);
+            border: none;
+            padding: 12px 30px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .hero .btn-light:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+        }
+
+        /* CTA Section */
+        .cta-section {
+            background: linear-gradient(135deg, var(--hero-blue) 0%, var(--hero-blue-dark) 100%) !important;
+            backdrop-filter: blur(10px);
+            padding: 60px 0;
+            text-align: center;
+            border-radius: 1rem;
+            margin: 50px 0 30px;
+            border: 1px solid rgba(255,255,255,0.3);
+            transition: all 0.3s;
+        }
+        
+        .cta-section:hover {
+            background: linear-gradient(135deg, var(--hero-blue-dark) 0%, var(--hero-blue) 100%) !important;
+            box-shadow: 0 0 40px rgba(11, 94, 215, 0.6);
+            transform: scale(1.02);
+        }
+        
+        .cta-section h2 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+            color: white !important;
+            font-weight: 800;
+        }
+        
+        .cta-section .btn-light {
+            background: white !important;
+            color: var(--primary) !important;
+            padding: 12px 30px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin: 0 10px;
+        }
+        
+        .cta-section .btn-light:hover {
+            background: var(--secondary) !important;
+            color: #000 !important;
+            transform: translateY(-3px);
+        }
+        
+        .cta-section .btn-outline-light {
+            border: 2px solid white !important;
+            color: white !important;
+            background: transparent;
+            padding: 12px 30px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin: 0 10px;
+        }
+        
+        .cta-section .btn-outline-light:hover {
+            background: white !important;
+            color: var(--primary) !important;
+            transform: translateY(-3px);
+        }
+
+        /* Trust Badges */
+        .trust-badge {
+            transition: all 0.3s;
+            cursor: pointer;
+            background: rgba(255, 255, 255, 0.12);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+        }
+
+        .trust-badge:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .trust-badge i {
+            transition: all 0.3s;
+            color: var(--accent) !important;
+        }
+
+        /* Category Cards */
+        .category-card {
+            transition: all 0.3s;
+            cursor: pointer;
+            background: rgba(255, 255, 255, 0.12);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 1.5rem 1rem;
+            text-decoration: none;
+            display: block;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .category-card:hover {
+            transform: translateY(-10px);
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .category-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .category-card:hover .category-icon {
+            transform: scale(1.1);
+        }
+
+        .category-icon i {
+            font-size: 2rem;
+            color: white;
+        }
+
+        /* Product Cards */
+        .card {
+            transition: all 0.3s ease;
+            animation: fadeInUp 0.5s ease-out;
+            border-radius: 15px !important;
+            overflow: hidden;
+            background: rgba(30, 30, 40, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+
+        .card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3) !important;
+            background: rgba(40, 40, 50, 0.98);
+        }
+
+        .card-img-top {
+            transition: transform 0.5s;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .card:hover .card-img-top {
+            transform: scale(1.05);
+        }
+
+        /* Testimonial Cards - DYNAMIC */
+        .testimonial-card {
+            transition: all 0.3s;
+            border: none;
+            background: rgba(255, 255, 255, 0.12);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .testimonial-card:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        /* Newsletter */
+        .newsletter {
+            background: linear-gradient(135deg, rgba(11, 94, 215, 0.95), rgba(0, 212, 255, 0.95));
+            border-radius: 20px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+        }
+
+        /* Footer */
+        .footer {
+            background: linear-gradient(135deg, rgba(26, 29, 32, 0.98), rgba(15, 17, 20, 0.98));
+            color: #ffffff;
+            padding: 50px 0 20px;
+            margin-top: auto;
+            backdrop-filter: blur(10px);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary), var(--accent), var(--secondary));
+        }
+
+        .footer h6 {
+            font-weight: 700;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+            color: var(--accent);
+        }
+
+        .footer a {
+            color: #adb5bd;
+            text-decoration: none;
+            transition: 0.3s;
+        }
+
+        .footer a:hover {
+            color: var(--accent);
+            transform: translateX(5px);
+        }
+
+        .social-icons a {
+            font-size: 1.2rem;
+            margin-right: 15px;
+            color: #ffffff;
+            background: rgba(255,255,255,0.1);
+            padding: 8px 12px;
+            border-radius: 50%;
+            display: inline-block;
+            transition: all 0.3s;
+        }
+
+        .social-icons a:hover {
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            transform: translateY(-3px);
+        }
+
+        .contact-item i {
+            margin-right: 10px;
+            color: var(--accent);
+        }
+
+        .copyright-bar {
+            background-color: rgba(0,0,0,0.5);
+            padding: 15px 0;
+            text-align: center;
+            font-size: 0.9rem;
+            color: #6c757d;
+        }
+
+        /* Pagination */
+        .pagination .page-link {
+            color: white;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            margin: 0 3px;
+        }
+
+        .pagination .page-link:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        .pagination .active .page-link {
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            border-color: transparent;
+        }
+
+        /* Back to Top */
+        #backToTop {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            display: none;
+            z-index: 9999;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            border: none;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        #backToTop:hover {
+            transform: translateY(-3px);
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 1.8rem;
+            }
+            .hero {
+                padding: 2rem;
+            }
+            .category-icon {
+                width: 60px;
+                height: 60px;
+            }
+            .cta-section h2 {
+                font-size: 1.5rem;
+            }
+            .cta-section .btn-light,
+            .cta-section .btn-outline-light {
+                margin: 10px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-dark">
+    <div class="container">
+        <a class="navbar-brand" href="{% url 'home' %}">🛒 displaystore</a>
+
+        <button class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav me-auto">
+                <li class="nav-item"><a class="nav-link" href="{% url 'home' %}">🏠 Home</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'home' %}">🛍️ Shop</a></li>
+
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button">📂 Category</a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="{% url 'home' %}">All Categories</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        {% for category in categories %}
+                        <li><a class="dropdown-item" href="{% url 'home' %}?category={{ category.id }}">{{ category.name }}</a></li>
+                        {% endfor %}
+                    </ul>
+                </li>
+
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button">📄 Pages</a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="{% url 'about_us' %}">About Us</a></li>
+                        <li><a class="dropdown-item" href="{% url 'contact' %}">Contact</a></li>
+                        {% if user.is_staff %}
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="{% url 'contact_messages' %}">Contact Messages</a></li>
+                        {% endif %}
+                    </ul>
+                </li>
+            </ul>
+
+            <form class="d-flex me-3" method="GET" action="{% url 'search_products' %}">
+                <input class="form-control me-2" name="q" placeholder="🔍 Search products...">
+                <button class="btn btn-light" type="submit">Search</button>
+            </form>
+
+            <ul class="navbar-nav">
+                <li class="nav-item me-2">
+                    <a class="nav-link" href="{% url 'view_cart' %}"><i class="bi bi-cart"></i> Cart</a>
+                </li>
+
+                {% if user.is_authenticated %}
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle btn btn-outline-light rounded-pill px-3" data-bs-toggle="dropdown" href="#" role="button">
+                        👋 Hi, {{ user.username }}
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end shadow">
+                        <li><a class="dropdown-item" href="{% url 'profile' %}"><i class="bi bi-person"></i> My Profile</a></li>
+                        <li>
+                            <span class="dropdown-item-text">
+                                {% if user.profile.user_type == 'seller' %}
+                                    <span class="badge bg-primary">Seller</span>
+                                {% else %}
+                                    <span class="badge bg-success">Buyer</span>
+                                {% endif %}
+                            </span>
+                        </li>
+                        <li><hr class="dropdown-divider"></li>
+                        
+                        {% if user.profile.user_type == 'seller' %}
+                        <li><a class="dropdown-item" href="{% url 'seller_dashboard' %}"><i class="bi bi-speedometer2"></i> Dashboard</a></li>
+                        <li><a class="dropdown-item" href="{% url 'add_product' %}"><i class="bi bi-plus-circle"></i> Add Product</a></li>
+                        {% endif %}
+
+                        {% if user.is_staff %}
+                        <li><a class="dropdown-item" href="{% url 'contact_messages' %}"><i class="bi bi-envelope"></i> Messages</a></li>
+                        <li><a class="dropdown-item" href="/admin/">Admin</a></li>
+                        {% endif %}
+
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item text-danger" href="{% url 'store_logout' %}"><i class="bi bi-box-arrow-right"></i> Logout</a></li>
+                    </ul>
+                </li>
+                {% else %}
+                <li class="nav-item me-2"><a class="btn btn-outline-light" href="{% url 'login' %}">Sign In</a></li>
+                <li class="nav-item"><a class="btn btn-warning" href="{% url 'signup' %}">Sign Up</a></li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="container mt-4">
+    <!-- Hero Section -->
+    <div class="hero">
+        <h1>Welcome to displaystore</h1>
+        <p class="lead">Premium laptop, smartphone, tablet, and desktop screens in Rwanda</p>
+        <a href="#products" class="btn btn-light btn-lg">Explore Collection →</a>
+    </div>
+
+    <!-- Trust Badges -->
+    <div class="row text-center mt-5 mb-5 g-4">
+        <div class="col-md-3 col-6">
+            <div class="trust-badge">
+                <i class="bi bi-shield-check" style="font-size: 2.5rem;"></i>
+                <p class="mt-2 fw-bold mb-0">Secure Payments</p>
+                <small class="text-white-50">100% encrypted</small>
+            </div>
+        </div>
+        <div class="col-md-3 col-6">
+            <div class="trust-badge">
+                <i class="bi bi-truck" style="font-size: 2.5rem;"></i>
+                <p class="mt-2 fw-bold mb-0">Free Delivery</p>
+                <small class="text-white-50">On orders 50,000+ RWF</small>
+            </div>
+        </div>
+        <div class="col-md-3 col-6">
+            <div class="trust-badge">
+                <i class="bi bi-arrow-return-left" style="font-size: 2.5rem;"></i>
+                <p class="mt-2 fw-bold mb-0">7-Day Returns</p>
+                <small class="text-white-50">Hassle-free policy</small>
+            </div>
+        </div>
+        <div class="col-md-3 col-6">
+            <div class="trust-badge">
+                <i class="bi bi-headset" style="font-size: 2.5rem;"></i>
+                <p class="mt-2 fw-bold mb-0">24/7 Support</p>
+                <small class="text-white-50">Chat with us anytime</small>
+            </div>
+        </div>
+    </div>
+
+    <!-- Featured Categories -->
+    {% if categories %}
+    <div class="mb-5">
+        <h2 class="text-center mb-4 text-white">✨ Shop by Screen Type</h2>
+        <div class="row g-4">
+            {% for category in categories %}
+            <div class="col-md-3 col-6">
+                <a href="{% url 'home' %}?category={{ category.id }}" class="category-card text-center text-decoration-none {% if selected_category == category.id|stringformat:'s' %}active{% endif %}">
+                    <div class="category-icon">
+                        {% if 'laptop' in category.name|lower %}
+                            <i class="bi bi-laptop"></i>
+                        {% elif 'smartphone' in category.name|lower or 'phone' in category.name|lower %}
+                            <i class="bi bi-phone"></i>
+                        {% elif 'tablet' in category.name|lower %}
+                            <i class="bi bi-tablet"></i>
+                        {% elif 'desktop' in category.name|lower or 'monitor' in category.name|lower %}
+                            <i class="bi bi-pc-display"></i>
+                        {% else %}
+                            <i class="bi bi-grid"></i>
+                        {% endif %}
+                    </div>
+                    <p class="mt-3 fw-bold mb-1 text-white">{{ category.name }}</p>
+                    <small class="text-white-50">Shop Now →</small>
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Products Heading -->
+    <div class="mb-4">
+        <h2 class="text-white fw-bold" style="font-size: 2rem;">
+            <i class="bi bi-bag-check"></i> Products You Can Buy
+        </h2>
+        <p class="text-white-50">Discover our latest collection of high-quality screens</p>
+    </div>
+
+    <!-- Products Section -->
+    <div class="row mt-5 g-4" id="products">
+        {% for product in products %}
+        <div class="col-md-3 mb-4">
+            <div class="card h-100 shadow-sm border-0">
+                {% if product.image %}
+                <img src="{{ product.image.url }}" class="card-img-top" style="height: 200px; object-fit: cover;" loading="lazy">
+                {% else %}
+                <img src="https://via.placeholder.com/200x200" class="card-img-top" style="height: 200px; object-fit: cover;" loading="lazy">
+                {% endif %}
+                <div class="card-body d-flex flex-column">
+                    <h5 class="fw-bold">{{ product.name|truncatechars:30 }}</h5>
+                    <p class="text-primary fw-bold fs-4">{{ product.price }} RWF</p>
+                    <p class="card-text text-white-50 small text-truncate">{{ product.description|truncatechars:60 }}</p>
+                    
+                    {% if user.is_authenticated and user_type %}
+                        <form method="post" action="{% url 'add_to_cart' product.id %}" class="mt-auto">
+                            {% csrf_token %}
+                            <div class="d-flex align-items-center mb-2">
+                                <label for="quantity-{{ product.id }}" class="text-white-50 me-2 small">Qty:</label>
+                                <input type="number" id="quantity-{{ product.id }}" name="quantity" value="1" min="1" max="{{ product.stock }}" 
+                                       class="form-control form-control-sm" style="width: 70px;" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary w-100">🛒 Add to Cart</button>
+                        </form>
+                    {% endif %}
+                    <a href="{% url 'product_detail' product.id %}" class="btn btn-outline-light mt-2">👁️ View Details</a>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12 text-center py-5">
+            <i class="bi bi-emoji-frown" style="font-size: 4rem; color: rgba(255,255,255,0.5);"></i>
+            <p class="text-white-50 mt-3 fs-5">No products found.</p>
+            <a href="{% url 'home' %}" class="btn btn-primary mt-3">Browse All Products</a>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Pagination -->
+    <div class="d-flex justify-content-center mt-4">
+        <nav>
+            <ul class="pagination">
+                {% if products.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page=1{% if selected_category %}&category={{ selected_category }}{% endif %}">&laquo; First</a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ products.previous_page_number }}{% if selected_category %}&category={{ selected_category }}{% endif %}">Previous</a>
+                    </li>
+                {% endif %}
+
+                {% for num in products.paginator.page_range %}
+                    {% if products.number == num %}
+                        <li class="page-item active">
+                            <span class="page-link">{{ num }}</span>
+                        </li>
+                    {% elif num > products.number|add:'-3' and num < products.number|add:'3' %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ num }}{% if selected_category %}&category={{ selected_category }}{% endif %}">{{ num }}</a>
+                        </li>
+                    {% endif %}
+                {% endfor %}
+
+                {% if products.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ products.next_page_number }}{% if selected_category %}&category={{ selected_category }}{% endif %}">Next</a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ products.paginator.num_pages }}{% if selected_category %}&category={{ selected_category }}{% endif %}">Last &raquo;</a>
+                    </li>
+                {% endif %}
+            </ul>
+        </nav>
+    </div>
+
+    <!-- ========== DYNAMIC CUSTOMER REVIEWS SECTION ========== -->
+    <div class="mt-5 mb-5">
+        <h2 class="text-center mb-4 text-white">⭐ What Our Customers Say</h2>
+        <div class="row g-4">
+            {% if recent_reviews %}
+                {% for review in recent_reviews %}
+                <div class="col-md-4">
+                    <div class="testimonial-card card h-100 p-4 text-center">
+                        <div class="mb-2">
+                            {% for i in "12345"|make_list %}
+                                {% if forloop.counter <= review.rating %}
+                                    <i class="bi bi-star-fill text-warning"></i>
+                                {% else %}
+                                    <i class="bi bi-star text-warning"></i>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                        <p class="mt-2">"{{ review.comment|truncatechars:100 }}"</p>
+                        <small class="text-white-50 fw-bold">- {{ review.user.username }}</small>
+                        {% if review.is_verified_purchase %}
+                            <small class="text-success mt-1">
+                                <i class="bi bi-check-circle-fill"></i> Verified Purchase
+                            </small>
+                        {% endif %}
+                        <small class="text-white-50 mt-2">on {{ review.product.name|truncatechars:30 }}</small>
+                        <a href="{% url 'product_detail' review.product.id %}" class="btn btn-sm btn-outline-light mt-3">
+                            View Product →
+                        </a>
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <div class="col-12 text-center">
+                    <div class="testimonial-card card p-5 text-center">
+                        <i class="bi bi-chat-dots" style="font-size: 4rem; color: rgba(255,255,255,0.5);"></i>
+                        <p class="mt-3 text-white-50">No reviews yet. Be the first to leave a review!</p>
+                        {% if user.is_authenticated and user_type == 'buyer' %}
+                            <a href="#products" class="btn btn-outline-light mt-2">Shop Now & Review</a>
+                        {% else %}
+                            <a href="{% url 'login' %}" class="btn btn-outline-light mt-2">Login to Review</a>
+                        {% endif %}
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Newsletter Section -->
+    <div class="newsletter p-5 mb-5 text-white">
+        <div class="row align-items-center">
+            <div class="col-md-6">
+                <h3>📧 Get 10% OFF Your First Order!</h3>
+                <p class="mb-0">Subscribe for exclusive deals on premium screens</p>
+            </div>
+            <div class="col-md-6">
+                <div class="input-group">
+                    <input type="email" class="form-control form-control-lg" placeholder="Your email address" id="newsletterEmail">
+                    <button class="btn btn-dark btn-lg" onclick="alert('Thanks for subscribing! Check your email for 10% OFF code.')">Subscribe →</button>
+                </div>
+                <small class="mt-2 d-block text-white-50">No spam, unsubscribe anytime.</small>
+            </div>
+        </div>
+    </div>
+
+    <!-- CTA Section -->
+    <div class="cta-section">
+        <div class="container">
+            <h2>Ready to Start Your Journey?</h2>
+            <p class="mb-4">Join thousands of happy buyers and sellers on displaystore today!</p>
+            {% if not user.is_authenticated %}
+                <a href="{% url 'signup' %}" class="btn btn-light btn-lg">Sign Up Now</a>
+                <a href="{% url 'login' %}" class="btn btn-outline-light btn-lg">Sign In</a>
+            {% else %}
+                <a href="#products" class="btn btn-light btn-lg">Start Shopping</a>
+                {% if user.profile.user_type == 'seller' %}
+                    <a href="{% url 'add_product' %}" class="btn btn-outline-light btn-lg">Add Product</a>
+                {% endif %}
+            {% endif %}
+
+{% include 'screeNova/footer.html' %}
+
+<!-- Back to Top Button -->
+<button onclick="topFunction()" id="backToTop" class="btn btn-primary rounded-circle">
+    <i class="bi bi-arrow-up"></i>
+</button>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+// Back to Top Button
+window.onscroll = function() {
+    const btn = document.getElementById("backToTop");
+    if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+        btn.style.display = "block";
+    } else {
+        btn.style.display = "none";
+    }
+};
+
+function topFunction() {
+    window.scrollTo({top: 0, behavior: 'smooth'});
+}
+
+// Newsletter Subscription
+document.getElementById('newsletterEmail')?.addEventListener('keypress', function(e) {
+    if (e.key === 'Enter') {
+        alert('Thanks for subscribing to displaystore! Check your email for 10% OFF code.');
+        this.value = '';
+    }
+});
+</script>
+
+</body>
+</html>

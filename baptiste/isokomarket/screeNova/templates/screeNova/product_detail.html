@@ -1,0 +1,1135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ product.name }} - displaystore</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <style>
+        .product-gallery {
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 10px;
+            padding: 20px;
+            background: rgba(30,30,40,0.95);
+            backdrop-filter: blur(10px);
+        }
+       
+        .main-image {
+            width: 100%;
+            height: 400px;
+            object-fit: contain;
+            cursor: zoom-in;
+            border-radius: 8px;
+        }
+       
+        .thumbnail-images {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+            overflow-x: auto;
+            padding-bottom: 10px;
+        }
+       
+        .thumbnail {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border: 2px solid transparent;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+       
+        .thumbnail:hover {
+            border-color: #007bff;
+            transform: scale(1.05);
+        }
+       
+        .thumbnail.active {
+            border-color: #007bff;
+            box-shadow: 0 0 5px rgba(0,123,255,0.5);
+        }
+       
+        .product-title {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            color: white;
+        }
+       
+        .product-meta {
+            color: rgba(255,255,255,0.6);
+            font-size: 0.9rem;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+       
+        .product-price {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #28a745;
+            margin-bottom: 20px;
+        }
+       
+        .product-availability {
+            margin-bottom: 20px;
+            padding: 10px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 5px;
+        }
+       
+        .in-stock {
+            color: #28a745;
+            font-weight: bold;
+        }
+       
+        .out-of-stock {
+            color: #dc3545;
+            font-weight: bold;
+        }
+       
+        .low-stock {
+            color: #ffc107;
+            font-weight: bold;
+        }
+       
+        .specs-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+       
+        .specs-table tr {
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+       
+        .specs-table td {
+            padding: 12px 5px;
+            color: rgba(255,255,255,0.8);
+        }
+       
+        .specs-table td:first-child {
+            font-weight: bold;
+            width: 150px;
+            color: #00d4ff;
+            background: rgba(0,0,0,0.2);
+            padding-left: 15px;
+        }
+       
+        .feature-list {
+            list-style: none;
+            padding: 0;
+        }
+       
+        .feature-list li {
+            padding: 10px 0;
+            border-bottom: 1px dashed rgba(255,255,255,0.1);
+            display: flex;
+            align-items: center;
+            color: rgba(255,255,255,0.8);
+        }
+       
+        .feature-list li:before {
+            content: "✓";
+            color: #28a745;
+            margin-right: 10px;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+       
+        .action-buttons {
+            margin: 30px 0;
+            padding: 20px 0;
+            border-top: 2px solid rgba(255,255,255,0.1);
+            border-bottom: 2px solid rgba(255,255,255,0.1);
+        }
+       
+        .action-buttons .btn {
+            padding: 12px 30px;
+            font-size: 1.1rem;
+            margin-right: 10px;
+        }
+       
+        .seller-info {
+            background: linear-gradient(135deg, rgba(11,94,215,0.2), rgba(0,212,255,0.1));
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border-left: 4px solid #007bff;
+            backdrop-filter: blur(5px);
+        }
+        
+        .seller-info h5, .seller-info p {
+            color: white;
+        }
+       
+        .tab-content {
+            padding: 20px;
+            background: rgba(30,30,40,0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-top: none;
+            border-radius: 0 0 10px 10px;
+        }
+        
+        .tab-content h5 {
+            color: white;
+        }
+        
+        .tab-content p {
+            color: rgba(255,255,255,0.8);
+        }
+       
+        .nav-tabs .nav-link {
+            color: rgba(255,255,255,0.7);
+            font-weight: 500;
+            background: rgba(30,30,40,0.9);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+       
+        .nav-tabs .nav-link.active {
+            color: #00d4ff;
+            font-weight: 600;
+            background: rgba(30,30,40,0.95);
+            border-bottom-color: transparent;
+        }
+       
+        .breadcrumb {
+            background: none;
+            padding: 0;
+            margin-bottom: 20px;
+        }
+        
+        .breadcrumb-item a {
+            color: #00d4ff;
+            text-decoration: none;
+        }
+        
+        .breadcrumb-item.active {
+            color: rgba(255,255,255,0.6);
+        }
+       
+        .view-count {
+            display: inline-block;
+            padding: 5px 10px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 20px;
+            font-size: 0.9rem;
+        }
+
+        /* ========== REVIEWS STYLES ========== */
+        .reviews-section {
+            margin-top: 0;
+            padding: 0;
+        }
+       
+        .rating-summary {
+            background: rgba(255,255,255,0.05);
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+       
+        .average-rating {
+            text-align: center;
+            padding: 15px;
+        }
+       
+        .average-rating .rating-number {
+            font-size: 3.5rem;
+            font-weight: bold;
+            color: #ffc107;
+        }
+       
+        .rating-stars {
+            color: #ffc107;
+            font-size: 1.2rem;
+            margin: 10px 0;
+        }
+       
+        .rating-bar-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+       
+        .rating-bar-item .stars {
+            width: 60px;
+            color: #ffc107;
+        }
+       
+        .rating-bar-item .progress {
+            flex: 1;
+            height: 8px;
+            margin: 0 10px;
+            background: rgba(255,255,255,0.2);
+        }
+       
+        .rating-bar-item .progress-bar {
+            background: #ffc107;
+            border-radius: 4px;
+        }
+       
+        .rating-bar-item .count {
+            width: 50px;
+            color: rgba(255,255,255,0.6);
+        }
+       
+        .review-card {
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            padding: 20px 0;
+            transition: all 0.3s;
+        }
+        
+        .review-card:last-child {
+            border-bottom: none;
+        }
+        
+        .review-card:hover {
+            background: rgba(255,255,255,0.03);
+            padding-left: 10px;
+        }
+       
+        .reviewer-avatar {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #007bff, #00d4ff);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 1.2rem;
+            margin-right: 15px;
+            flex-shrink: 0;
+        }
+       
+        .verified-badge {
+            background: #28a745;
+            color: white;
+            font-size: 0.7rem;
+            padding: 2px 8px;
+            border-radius: 20px;
+            margin-left: 10px;
+        }
+        
+        .review-title {
+            font-weight: bold;
+            font-size: 1.1rem;
+            margin: 10px 0 5px;
+            color: white;
+        }
+       
+        .review-comment {
+            color: rgba(255,255,255,0.7);
+            line-height: 1.6;
+        }
+        
+        .review-images img {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 5px;
+            cursor: pointer;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        
+        .helpful-btn {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 20px;
+            padding: 5px 12px;
+            font-size: 0.8rem;
+            transition: all 0.3s;
+            color: rgba(255,255,255,0.7);
+        }
+        
+        .helpful-btn:hover {
+            background: #007bff;
+            color: white;
+            border-color: #007bff;
+        }
+        
+        .review-form {
+            background: rgba(255,255,255,0.05);
+            padding: 25px;
+            border-radius: 10px;
+            margin-top: 30px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .review-form h5 {
+            color: white;
+            margin-bottom: 20px;
+        }
+        
+        /* FIXED: Working star rating styles */
+        .star-rating-input {
+            display: flex;
+            flex-direction: row-reverse;
+            justify-content: flex-end;
+            gap: 8px;
+            margin: 15px 0;
+        }
+       
+        .star-rating-input input {
+            display: none;
+        }
+       
+        .star-rating-input label {
+            font-size: 2rem;
+            color: #555;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+       
+        .star-rating-input label:hover,
+        .star-rating-input label:hover ~ label,
+        .star-rating-input input:checked ~ label {
+            color: #ffc107;
+        }
+        
+        .btn-submit-review {
+            background: linear-gradient(135deg, #007bff, #00d4ff);
+            border: none;
+            padding: 12px 30px;
+            font-weight: bold;
+            color: white;
+            cursor: pointer;
+        }
+        
+        .btn-submit-review:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,123,255,0.3);
+        }
+        
+        .related-product-card {
+            background: rgba(30,30,40,0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: all 0.3s;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        .related-product-card:hover {
+            transform: translateY(-5px);
+            border-color: #00d4ff;
+        }
+        
+        .related-product-card img {
+            height: 150px;
+            object-fit: cover;
+        }
+        
+        .modal-image {
+            max-width: 100%;
+            max-height: 80vh;
+        }
+        
+        /* Alert styles */
+        .alert-success {
+            background: rgba(40,167,69,0.2);
+            border: 1px solid #28a745;
+            color: #28a745;
+        }
+        
+        .alert-info {
+            background: rgba(23,162,184,0.2);
+            border: 1px solid #17a2b8;
+            color: #17a2b8;
+        }
+        
+        .alert-warning {
+            background: rgba(255,193,7,0.2);
+            border: 1px solid #ffc107;
+            color: #ffc107;
+        }
+        
+        .form-control {
+            background: rgba(255,255,255,0.1) !important;
+            border: 1px solid rgba(255,255,255,0.2) !important;
+            color: white !important;
+        }
+        
+        .form-control:focus {
+            background: rgba(255,255,255,0.15) !important;
+            border-color: #00d4ff !important;
+            box-shadow: none !important;
+            color: white !important;
+        }
+        
+        .form-control::placeholder {
+            color: rgba(255,255,255,0.5);
+        }
+       
+        @media (max-width: 768px) {
+            .average-rating {
+                border-bottom: 1px solid rgba(255,255,255,0.1);
+                margin-bottom: 20px;
+            }
+            .action-buttons .btn {
+                margin-bottom: 10px;
+            }
+            .product-title {
+                font-size: 1.5rem;
+            }
+            .product-price {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
+</head>
+
+<body style="background: #0a0a0a;">
+
+{% include 'screeNova/navbar.html' %}
+
+<div class="container mt-4">
+    <!-- Breadcrumb Navigation -->
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'home' %}?category={{ product.category.id }}">{{ product.category.name }}</a></li>
+            <li class="breadcrumb-item active" aria-current="page">{{ product.name|truncatechars:30 }}</li>
+        </ol>
+    </nav>
+
+    <div class="row">
+        <!-- Product Images Column -->
+        <div class="col-md-6">
+            <div class="product-gallery">
+                <!-- Main Image -->
+                {% with images=product.get_all_images %}
+                <img id="mainImage"
+                     src="{% if images.0 %}{{ images.0.url }}{% else %}https://via.placeholder.com/400x400{% endif %}"
+                     class="main-image"
+                     alt="{{ product.name }}"
+                     onclick="openZoomModal(this.src)">
+               
+                <!-- Thumbnail Images -->
+                {% if images|length > 1 %}
+                <div class="thumbnail-images">
+                    {% for image in images %}
+                    <img src="{{ image.url }}"
+                         class="thumbnail {% if forloop.first %}active{% endif %}"
+                         onclick="changeImage('{{ image.url }}', this)"
+                         alt="Thumbnail {{ forloop.counter }}">
+                    {% endfor %}
+                </div>
+                {% endif %}
+                {% endwith %}
+            </div>
+        </div>
+       
+        <!-- Product Details Column -->
+        <div class="col-md-6">
+            <h1 class="product-title">{{ product.name }}</h1>
+           
+            <div class="product-meta">
+                <span><i class="bi bi-tag-fill"></i> {{ product.category.name }}</span>
+                <span class="mx-2">|</span>
+                <span class="view-count">
+                    <i class="bi bi-eye"></i> {{ product.views }} views
+                </span>
+                <span class="mx-2">|</span>
+                <span><i class="bi bi-calendar"></i> Added: {{ product.created_at|date:"M d, Y" }}</span>
+            </div>
+           
+            <div class="product-price">
+                RWF {{ product.price|floatformat:2 }}
+            </div>
+           
+            <div class="product-availability">
+                {% if product.stock > 10 %}
+                    <span class="in-stock">
+                        <i class="bi bi-check-circle-fill"></i> In Stock ({{ product.stock }} available)
+                    </span>
+                {% elif product.stock > 0 %}
+                    <span class="low-stock">
+                        <i class="bi bi-exclamation-triangle-fill"></i> Low Stock - Only {{ product.stock }} left!
+                    </span>
+                {% else %}
+                    <span class="out-of-stock">
+                        <i class="bi bi-x-circle-fill"></i> Out of Stock
+                    </span>
+                {% endif %}
+            </div>
+           
+            <!-- Short Description Preview -->
+            <div class="mb-3">
+                <p class="text-white-50">{{ product.description|truncatechars:150 }}</p>
+            </div>
+           
+            <!-- Action Buttons -->
+            <div class="action-buttons">
+                {% if user.is_authenticated %}
+                    {% if product.stock > 0 %}
+                        <form method="post" action="{% url 'add_to_cart' product.id %}" class="d-inline">
+                            {% csrf_token %}
+                            <div class="d-flex align-items-center mb-3">
+                                <label for="quantity-detail" class="text-white me-2">Quantity:</label>
+                                <input type="number" id="quantity-detail" name="quantity" value="1" min="1" max="{{ product.stock }}" 
+                                       class="form-control" style="width: 80px;" required>
+                                <span class="text-white-50 ms-2">({{ product.stock }} available)</span>
+                            </div>
+                            <button type="submit" class="btn btn-primary me-2">
+                                <i class="bi bi-cart-plus"></i> Add to Cart
+                            </button>
+                        </form>
+                       
+                    {% else %}
+                        <button class="btn btn-secondary" disabled>
+                            <i class="bi bi-x-circle"></i> Out of Stock
+                        </button>
+                    {% endif %}
+                {% else %}
+                    <a href="{% url 'login' %}?next={% url 'product_detail' product.id %}" class="btn btn-primary">
+                        <i class="bi bi-box-arrow-in-right"></i> Login to Purchase
+                    </a>
+                {% endif %}
+               
+                <a href="{% url 'contact' %}" class="btn btn-outline-info">
+                    <i class="bi bi-envelope"></i> Contact Store
+                </a>
+                <a href="{% url 'home' %}" class="btn btn-outline-secondary">
+                    <i class="bi bi-arrow-left"></i> Continue Shopping
+                </a>
+            </div>
+           
+            <!-- Seller Info -->
+            <div class="seller-info">
+                <div class="d-flex align-items-center justify-content-between">
+                    <div class="d-flex align-items-center">
+                        <div class="flex-shrink-0">
+                            <i class="bi bi-shop" style="font-size: 2rem; color: #00d4ff;"></i>
+                        </div>
+                        <div class="flex-grow-1 ms-3">
+                            <h5 class="mb-1">Sold by: <strong>{{ product.seller.username }}</strong></h5>
+                            <p class="mb-0 text-white-50">
+                                <i class="bi bi-star-fill text-warning"></i> Trusted Seller
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <!-- Edit/Delete Buttons for Seller -->
+                    {% if user.is_authenticated and user == product.seller %}
+                    <div class="ms-3">
+                        <a href="{% url 'edit_product' product.id %}" class="btn btn-sm btn-outline-warning">
+                            <i class="bi bi-pencil"></i> Edit
+                        </a>
+                        <a href="{% url 'delete_product' product.id %}" class="btn btn-sm btn-outline-danger">
+                            <i class="bi bi-trash"></i> Delete
+                        </a>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+   
+    <!-- Detailed Information Tabs -->
+    <div class="row mt-5">
+        <div class="col-12">
+            <ul class="nav nav-tabs" id="productTabs" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="description-tab" data-bs-toggle="tab" data-bs-target="#description" type="button" role="tab">
+                        <i class="bi bi-file-text"></i> Full Description
+                    </button>
+                </li>
+                {% if product.brand or product.model_number or product.color or product.size or product.weight or product.material %}
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="specs-tab" data-bs-toggle="tab" data-bs-target="#specs" type="button" role="tab">
+                        <i class="bi bi-gear"></i> Specifications
+                    </button>
+                </li>
+                {% endif %}
+                {% if product.features %}
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="features-tab" data-bs-toggle="tab" data-bs-target="#features" type="button" role="tab">
+                        <i class="bi bi-star"></i> Features
+                    </button>
+                </li>
+                {% endif %}
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="shipping-tab" data-bs-toggle="tab" data-bs-target="#shipping" type="button" role="tab">
+                        <i class="bi bi-truck"></i> Shipping & Warranty
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="reviews-tab" data-bs-toggle="tab" data-bs-target="#reviews" type="button" role="tab">
+                        <i class="bi bi-chat-dots"></i> Reviews 
+                        {% if reviews_count > 0 %}
+                            <span class="badge bg-primary rounded-pill ms-1">{{ reviews_count }}</span>
+                        {% endif %}
+                    </button>
+                </li>
+            </ul>
+           
+            <div class="tab-content" id="productTabsContent">
+                <!-- Description Tab -->
+                <div class="tab-pane fade show active" id="description" role="tabpanel">
+                    <h5>Product Description</h5>
+                    <p>{{ product.description|linebreaks }}</p>
+                </div>
+               
+                <!-- Specifications Tab -->
+                {% if product.brand or product.model_number or product.color or product.size or product.weight or product.material %}
+                <div class="tab-pane fade" id="specs" role="tabpanel">
+                    <h5>Technical Specifications</h5>
+                    <table class="specs-table">
+                        {% if product.brand %}
+                        <tr>
+                            <td>Brand:</td>
+                            <td>{{ product.brand }}</td>
+                        </tr>
+                        {% endif %}
+                       
+                        {% if product.model_number %}
+                        <tr>
+                            <td>Model:</td>
+                            <td>{{ product.model_number }}</td>
+                        </tr>
+                        {% endif %}
+                       
+                        {% if product.color %}
+                        <tr>
+                            <td>Color:</td>
+                            <td>{{ product.color }}</td>
+                        </tr>
+                        {% endif %}
+                       
+                        {% if product.size %}
+                        <tr>
+                            <td>Size:</td>
+                            <td>{{ product.size }}</td>
+                        </tr>
+                        {% endif %}
+                       
+                        {% if product.weight %}
+                        <tr>
+                            <td>Weight:</td>
+                            <td>{{ product.weight }}</td>
+                        </tr>
+                        {% endif %}
+                       
+                        {% if product.material %}
+                        <tr>
+                            <td>Material:</td>
+                            <td>{{ product.material }}</td>
+                        </tr>
+                        {% endif %}
+                       
+                        {% if product.manufacturer %}
+                        <tr>
+                            <td>Manufacturer:</td>
+                            <td>{{ product.manufacturer }}</td>
+                        </tr>
+                        {% endif %}
+                       
+                        {% if product.country_of_origin %}
+                        <tr>
+                            <td>Country of Origin:</td>
+                            <td>{{ product.country_of_origin }}</td>
+                        </tr>
+                        {% endif %}
+                    </table>
+                </div>
+                {% endif %}
+               
+                <!-- Features Tab -->
+                {% if product.features %}
+                <div class="tab-pane fade" id="features" role="tabpanel">
+                    <h5>Key Features</h5>
+                    <ul class="feature-list">
+                        {% for feature in product.get_features_list %}
+                        <li>{{ feature }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                {% endif %}
+               
+                <!-- Shipping Tab -->
+                <div class="tab-pane fade" id="shipping" role="tabpanel">
+                    <h5>Shipping Information</h5>
+                    <table class="specs-table">
+                        <tr>
+                            <td>Shipping Weight:</td>
+                            <td>{{ product.shipping_weight|default:"Not specified" }}</td>
+                        </tr>
+                        <tr>
+                            <td>Shipping Dimensions:</td>
+                            <td>{{ product.shipping_dimensions|default:"Not specified" }}</td>
+                        </tr>
+                        <tr>
+                            <td>Warranty:</td>
+                            <td>{{ product.warranty|default:"Standard manufacturer warranty" }}</td>
+                        </tr>
+                        <tr>
+                            <td>Estimated Delivery:</td>
+                            <td>3-5 business days within Rwanda</td>
+                        </tr>
+                    </table>
+                </div>
+               
+                <!-- ========== REVIEWS TAB WITH WORKING FORM ========== -->
+                <div class="tab-pane fade" id="reviews" role="tabpanel">
+                    <div class="reviews-section">
+                        
+                        <!-- Rating Summary -->
+                        <div class="rating-summary">
+                            <div class="row align-items-center">
+                                <div class="col-md-4">
+                                    <div class="average-rating">
+                                        <div class="rating-number">{{ avg_rating|floatformat:1|default:"0.0" }}</div>
+                                        <div class="rating-stars">
+                                            {% with avg_rating|default:0 as rating %}
+                                                {% for i in "12345"|make_list %}
+                                                    {% if forloop.counter <= rating %}
+                                                        <i class="bi bi-star-fill"></i>
+                                                    {% elif forloop.counter <= rating|add:"0.5" %}
+                                                        <i class="bi bi-star-half"></i>
+                                                    {% else %}
+                                                        <i class="bi bi-star"></i>
+                                                    {% endif %}
+                                                {% endfor %}
+                                            {% endwith %}
+                                        </div>
+                                        <div class="text-white-50">Based on {{ reviews_count }} review{{ reviews_count|pluralize }}</div>
+                                    </div>
+                                </div>
+                                <div class="col-md-8">
+                                    {% for star in rating_breakdown %}
+                                    <div class="rating-bar-item">
+                                        <div class="stars">{{ star.stars }}★</div>
+                                        <div class="progress">
+                                            <div class="progress-bar" style="width: {{ star.percentage }}%"></div>
+                                        </div>
+                                        <div class="count">({{ star.count }})</div>
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Existing Reviews List -->
+                        <div class="reviews-list">
+                            <h5 class="text-white mb-3">Customer Reviews <i class="bi bi-chat-dots"></i></h5>
+                            
+                            {% if reviews %}
+                                {% for review in reviews %}
+                                <div class="review-card" id="review-{{ review.id }}">
+                                    <div class="d-flex">
+                                        <div class="reviewer-avatar">
+                                            {{ review.user.username|first|upper }}
+                                        </div>
+                                        <div class="flex-grow-1">
+                                            <div class="d-flex align-items-center flex-wrap">
+                                                <strong class="reviewer-name text-white">{{ review.user.username }}</strong>
+                                                {% if review.is_verified_purchase %}
+                                                    <span class="verified-badge">
+                                                        <i class="bi bi-check-circle-fill"></i> Verified Purchase
+                                                    </span>
+                                                {% endif %}
+                                                <small class="text-white-50 ms-auto">{{ review.created_at|date:"F d, Y" }}</small>
+                                            </div>
+                                            <div class="review-rating my-2">
+                                                {% for i in "12345"|make_list %}
+                                                    {% if forloop.counter <= review.rating %}
+                                                        <i class="bi bi-star-fill text-warning"></i>
+                                                    {% else %}
+                                                        <i class="bi bi-star text-warning"></i>
+                                                    {% endif %}
+                                                {% endfor %}
+                                            </div>
+                                            {% if review.title %}
+                                                <div class="review-title">{{ review.title }}</div>
+                                            {% endif %}
+                                            <div class="review-comment">{{ review.comment|linebreaks }}</div>
+                                            
+                                            {% if review.image %}
+                                            <div class="review-images mt-2">
+                                                <img src="{{ review.image.url }}" onclick="openImageModal('{{ review.image.url }}')" alt="Review image">
+                                            </div>
+                                            {% endif %}
+                                            
+                                            <div class="helpful-buttons mt-3">
+                                                <button type="button" class="helpful-btn" onclick="markHelpful({{ review.id }})">
+                                                    <i class="bi bi-hand-thumbs-up"></i> Helpful 
+                                                    <span class="helpful-count-{{ review.id }}">({{ review.helpful_count }})</span>
+                                                </button>
+                                                {% if user == review.user %}
+                                                    <button type="button" class="helpful-btn text-danger" onclick="deleteReview({{ review.id }})">
+                                                        <i class="bi bi-trash"></i> Delete
+                                                    </button>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                {% endfor %}
+
+                                <!-- Pagination for reviews -->
+                                {% if reviews.has_other_pages %}
+                                <nav class="mt-4">
+                                    <ul class="pagination justify-content-center">
+                                        {% if reviews.has_previous %}
+                                        <li class="page-item">
+                                            <a class="page-link" href="?review_page={{ reviews.previous_page_number }}#reviews-tab">Previous</a>
+                                        </li>
+                                        {% endif %}
+                                        {% for num in reviews.paginator.page_range %}
+                                        <li class="page-item {% if reviews.number == num %}active{% endif %}">
+                                            <a class="page-link" href="?review_page={{ num }}#reviews-tab">{{ num }}</a>
+                                        </li>
+                                        {% endfor %}
+                                        {% if reviews.has_next %}
+                                        <li class="page-item">
+                                            <a class="page-link" href="?review_page={{ reviews.next_page_number }}#reviews-tab">Next</a>
+                                        </li>
+                                        {% endif %}
+                                    </ul>
+                                </nav>
+                                {% endif %}
+
+                            {% else %}
+                                <div class="text-center py-5">
+                                    <i class="bi bi-chat-dots" style="font-size: 4rem; color: rgba(255,255,255,0.3);"></i>
+                                    <p class="mt-3 text-white-50">No reviews yet. Be the first to review this product!</p>
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <!-- WORKING REVIEW FORM -->
+                        {% if user.is_authenticated and user.profile.user_type == 'buyer' %}
+                            {% if has_purchased %}
+                                {% if has_reviewed %}
+                                    <div class="alert alert-success mt-4">
+                                        <i class="bi bi-check-circle-fill"></i> You have already reviewed this product. Thank you for your feedback!
+                                    </div>
+                                {% else %}
+                                    <div class="review-form" id="reviewForm">
+                                        <h5><i class="bi bi-star-fill text-warning"></i> Write Your Review</h5>
+                                        <form method="POST" action="{% url 'add_product_review' product.id %}" enctype="multipart/form-data" id="reviewFormSubmit">
+                                            {% csrf_token %}
+                                            
+                                            <div class="mb-3">
+                                                <label class="form-label text-white fw-bold">Your Rating *</label>
+                                                <div class="star-rating-input">
+                                                    <input type="radio" name="rating" value="5" id="star5" required><label for="star5">★</label>
+                                                    <input type="radio" name="rating" value="4" id="star4"><label for="star4">★</label>
+                                                    <input type="radio" name="rating" value="3" id="star3"><label for="star3">★</label>
+                                                    <input type="radio" name="rating" value="2" id="star2"><label for="star2">★</label>
+                                                    <input type="radio" name="rating" value="1" id="star1"><label for="star1">★</label>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="mb-3">
+                                                <label class="form-label text-white fw-bold">Review Title (Optional)</label>
+                                                <input type="text" name="title" class="form-control" placeholder="Summarize your experience">
+                                            </div>
+                                            
+                                            <div class="mb-3">
+                                                <label class="form-label text-white fw-bold">Your Review *</label>
+                                                <textarea name="comment" class="form-control" rows="4" placeholder="What did you like or dislike about this product?" required></textarea>
+                                            </div>
+                                            
+                                            <div class="mb-3">
+                                                <label class="form-label text-white fw-bold">Add Photo (Optional)</label>
+                                                <input type="file" name="review_image" class="form-control" accept="image/*">
+                                                <small class="text-white-50">Upload an image to share with your review</small>
+                                            </div>
+                                            
+                                            <button type="submit" class="btn btn-submit-review">
+                                                <i class="bi bi-send"></i> Submit Review
+                                            </button>
+                                        </form>
+                                    </div>
+                                {% endif %}
+                            {% else %}
+                                <div class="alert alert-info mt-4">
+                                    <i class="bi bi-info-circle-fill"></i> You can only review products you have purchased and received.
+                                    <a href="{% url 'view_cart' %}" class="alert-link">Buy this product now</a>
+                                </div>
+                            {% endif %}
+                        {% elif user.is_authenticated and user.profile.user_type == 'seller' %}
+                            <div class="alert alert-warning mt-4">
+                                <i class="bi bi-shop"></i> Sellers cannot review products. <a href="{% url 'home' %}" class="alert-link">Browse as buyer</a>
+                            </div>
+                        {% else %}
+                            <div class="alert alert-info mt-4">
+                                <i class="bi bi-box-arrow-in-right"></i> 
+                                <a href="{% url 'login' %}?next={% url 'product_detail' product.id %}" class="alert-link">Login</a> to leave a review
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+   
+    <!-- Related Products -->
+    {% if related_products %}
+    <div class="row mt-5">
+        <div class="col-12">
+            <h3 class="text-white mb-4">You May Also Like</h3>
+            <div class="row g-4">
+                {% for related in related_products %}
+                <div class="col-md-3 col-6">
+                    <div class="related-product-card card h-100">
+                        {% if related.image %}
+                        <img src="{{ related.image.url }}" class="card-img-top" alt="{{ related.name }}">
+                        {% else %}
+                        <img src="https://via.placeholder.com/200x150" class="card-img-top" alt="{{ related.name }}">
+                        {% endif %}
+                        <div class="card-body">
+                            <h6 class="card-title text-white">{{ related.name|truncatechars:25 }}</h6>
+                            <p class="card-text text-primary fw-bold">{{ related.price }} RWF</p>
+                            <a href="{% url 'product_detail' related.id %}" class="btn btn-sm btn-outline-light w-100">View Details</a>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+
+<!-- Image Zoom Modal -->
+<div class="modal fade" id="imageZoomModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-xl">
+        <div class="modal-content" style="background: #1a1a2e; border: 1px solid rgba(255,255,255,0.2);">
+            <div class="modal-header">
+                <h5 class="modal-title text-white">{{ product.name }}</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body text-center">
+                <img id="zoomImage" src="" class="modal-image" alt="Product zoom">
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+    // Image gallery functions
+    function changeImage(src, element) {
+        document.getElementById('mainImage').src = src;
+        document.querySelectorAll('.thumbnail').forEach(thumb => {
+            thumb.classList.remove('active');
+        });
+        element.classList.add('active');
+    }
+
+    function openZoomModal(src) {
+        document.getElementById('zoomImage').src = src;
+        new bootstrap.Modal(document.getElementById('imageZoomModal')).show();
+    }
+
+    function openImageModal(src) {
+        document.getElementById('zoomImage').src = src;
+        new bootstrap.Modal(document.getElementById('imageZoomModal')).show();
+    }
+
+    function buyNow(productId) {
+        if(confirm('Proceed to checkout?')) {
+            window.location.href = '/add-to-cart/' + productId + '/?next=payment_selection';
+        }
+    }
+
+    // Get CSRF token
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
+    // Mark review as helpful
+    function markHelpful(reviewId) {
+        fetch(`/review/${reviewId}/helpful/`, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': getCookie('csrftoken'),
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if(data.success) {
+                const countSpan = document.querySelector(`.helpful-count-${reviewId}`);
+                if(countSpan) {
+                    countSpan.innerText = `(${data.count})`;
+                }
+                // Show success message
+                alert('Thank you for your feedback!');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    }
+
+    // Delete review
+    function deleteReview(reviewId) {
+        if(confirm('Are you sure you want to delete your review? This action cannot be undone.')) {
+            fetch(`/review/${reviewId}/delete/`, {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': getCookie('csrftoken'),
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if(data.success) {
+                    const reviewElement = document.getElementById(`review-${reviewId}`);
+                    if(reviewElement) {
+                        reviewElement.remove();
+                    }
+                    alert('Review deleted successfully!');
+                    location.reload();
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Error deleting review. Please try again.');
+            });
+        }
+    }
+
+    // Activate reviews tab if URL has #reviews-tab
+    if(window.location.hash === '#reviews-tab') {
+        const reviewsTab = document.querySelector('#reviews-tab');
+        if(reviewsTab) {
+            const tab = new bootstrap.Tab(reviewsTab);
+            tab.show();
+        }
+    }
+    
+    // Debug: Check if form exists
+    console.log('Page loaded');
+    const reviewForm = document.getElementById('reviewFormSubmit');
+    if(reviewForm) {
+        console.log('Review form found');
+    } else {
+        console.log('Review form not found - user may not be eligible');
+    }
+</script>
+
+{% include 'screeNova/footer.html' %}
+
+</body>
+</html>

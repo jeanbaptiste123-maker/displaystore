@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Your Cart - displaystore</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+
+    <style>
+        /* ========== SAME BACKGROUND AS HOME PAGE ========== */
+        :root {
+            --primary: #0b5ed7;
+            --primary-dark: #084298;
+            --accent: #00d4ff;
+            --secondary: #ffdd00;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            background: #0a0a0a;
+        }
+
+        /* Screen/Technology Background Image - SAME AS HOME */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: url('https://images.unsplash.com/photo-1587831990711-23ca6441447b?w=1600&q=80');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            opacity: 0.4;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        /* Dark overlay - SAME AS HOME */
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(10, 10, 10, 0.6) 0%, rgba(30, 30, 30, 0.7) 100%);
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        /* Cart Container - Glass effect */
+        .cart-container {
+            max-width: 1000px;
+            margin: auto;
+            margin-top: 40px;
+            margin-bottom: 40px;
+            background: rgba(20, 20, 30, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0px 4px 15px rgba(0,0,0,0.3);
+            border: 1px solid rgba(255,255,255,0.15);
+        }
+
+        .cart-title {
+            font-weight: bold;
+            margin-bottom: 25px;
+            text-align: center;
+            color: #ffffff;
+            font-size: 2rem;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+            background: transparent;
+        }
+
+        .product-img {
+            width: 70px;
+            height: 70px;
+            object-fit: cover;
+            border-radius: 8px;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .total-box {
+            font-size: 22px;
+            font-weight: bold;
+            text-align: right;
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.6);
+            border-radius: 10px;
+            border-left: 4px solid #2ecc71;
+        }
+
+        /* ========== SOLID BACKGROUND COLORS FOR ALL TEXT ========== */
+        
+        /* Table styling */
+        .table {
+            margin-bottom: 0;
+            background: transparent;
+        }
+
+        .table tbody td {
+            vertical-align: middle;
+            border-color: rgba(255,255,255,0.15);
+            padding: 15px 12px;
+        }
+
+        /* Product Name - SOLID DARK BACKGROUND + BRIGHT TEXT */
+        .product-name {
+            background: rgba(0, 100, 200, 0.3) !important;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 1rem;
+        }
+        .product-name strong {
+            color: #00d4ff !important;
+            display: inline-block;
+            padding: 4px 8px;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 6px;
+        }
+
+        /* Price - SOLID GREEN BACKGROUND */
+        .product-price {
+            background: rgba(46, 204, 113, 0.15) !important;
+            border-radius: 8px;
+        }
+        .product-price strong {
+            color: #2ecc71 !important;
+            display: inline-block;
+            padding: 4px 8px;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 6px;
+            font-weight: 700;
+        }
+
+        /* Quantity - SOLID ORANGE BACKGROUND */
+        .product-quantity {
+            background: rgba(243, 156, 18, 0.15) !important;
+            border-radius: 8px;
+        }
+        .product-quantity strong {
+            color: #f39c12 !important;
+            display: inline-block;
+            padding: 4px 8px;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 6px;
+            font-weight: 700;
+        }
+
+        /* Subtotal - SOLID BLUE BACKGROUND */
+        .product-subtotal {
+            background: rgba(0, 212, 255, 0.15) !important;
+            border-radius: 8px;
+        }
+        .product-subtotal strong {
+            color: #00d4ff !important;
+            display: inline-block;
+            padding: 4px 8px;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 6px;
+            font-weight: 800;
+        }
+
+        /* Total amount - SOLID DARK BACKGROUND + BRIGHT GREEN */
+        .total-amount {
+            color: #2ecc71 !important;
+            font-weight: 800;
+            font-size: 1.5rem;
+            background: rgba(0, 0, 0, 0.6);
+            padding: 5px 15px;
+            border-radius: 8px;
+            display: inline-block;
+            text-shadow: 0 0 5px rgba(46,204,113,0.5);
+        }
+
+        /* Table header styling - SOLID BLUE GRADIENT */
+        .table thead th {
+            background: linear-gradient(135deg, #0b5ed7, #0099ff);
+            color: #ffffff;
+            font-weight: 700;
+            padding: 14px 12px;
+            border: none;
+            font-size: 0.95rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* Button styling */
+        .btn-continue {
+            background: linear-gradient(135deg, #0b5ed7, #0099ff);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-continue:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(11, 94, 215, 0.4);
+            color: white;
+        }
+
+        .btn-checkout {
+            background: linear-gradient(135deg, #2ecc71, #27ae60);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            font-size: 18px;
+            border-radius: 8px;
+            font-weight: 700;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-checkout:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(46, 204, 113, 0.4);
+            color: white;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #0b5ed7, #0099ff);
+            border: none;
+            padding: 12px 30px;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(11, 94, 215, 0.4);
+        }
+
+        /* Alert messages - SOLID BACKGROUNDS */
+        .alert {
+            border-radius: 8px;
+            margin-bottom: 20px;
+            padding: 12px 20px;
+            font-weight: 500;
+        }
+
+        .alert-success {
+            background: rgba(46, 204, 113, 0.9);
+            border: 1px solid #2ecc71;
+            color: #fff;
+        }
+
+        .alert-error, .alert-danger {
+            background: rgba(231, 76, 60, 0.9);
+            border: 1px solid #e74c3c;
+            color: #fff;
+        }
+
+        .alert-info {
+            background: rgba(0, 212, 255, 0.9);
+            border: 1px solid #00d4ff;
+            color: #fff;
+        }
+
+        /* Hover effect on table rows */
+        .table tbody tr:hover {
+            background-color: rgba(11, 94, 215, 0.2);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .table tbody tr:hover td {
+            background-color: transparent !important;
+        }
+
+        /* Empty cart styling */
+        .text-center p {
+            color: rgba(255,255,255,0.9);
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            background: rgba(0,0,0,0.5);
+            display: inline-block;
+            padding: 10px 20px;
+            border-radius: 8px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .cart-container {
+                margin: 20px;
+                padding: 15px;
+            }
+            .table {
+                font-size: 0.75rem;
+            }
+            .table tbody td {
+                padding: 10px 8px;
+            }
+            .product-img {
+                width: 45px;
+                height: 45px;
+            }
+            .product-name strong, 
+            .product-price strong, 
+            .product-quantity strong, 
+            .product-subtotal strong {
+                font-size: 0.75rem;
+                padding: 2px 5px;
+            }
+            .btn-continue, .btn-checkout {
+                padding: 8px 15px;
+                font-size: 0.85rem;
+            }
+            .total-box {
+                font-size: 1rem;
+            }
+            .total-amount {
+                font-size: 1.2rem;
+            }
+            .cart-title {
+                font-size: 1.5rem;
+            }
+        }
+
+        /* Additional visibility fixes */
+        .table-responsive {
+            border-radius: 8px;
+            overflow-x: auto;
+        }
+
+        /* Make sure icons are visible */
+        .bi {
+            margin-right: 5px;
+        }
+        
+        /* Remove any white text issues */
+        body, .cart-container, .table, .table tbody td, .total-box {
+            color: #ffffff;
+        }
+    </style>
+</head>
+
+<body>
+
+{% include 'screeNova/navbar.html' %}
+
+<div class="cart-container">
+
+    <h2 class="cart-title"><i class="bi bi-cart-fill"></i> Your Shopping Cart</h2>
+
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">
+                <i class="bi bi-info-circle-fill"></i> {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    {% if cart_items %}
+
+    <div class="table-responsive">
+        <table class="table align-middle">
+            <thead>
+                <tr>
+                    <th><i class="bi bi-image"></i> Image</th>
+                    <th><i class="bi bi-box"></i> Product</th>
+                    <th><i class="bi bi-tag"></i> Price</th>
+                    <th><i class="bi bi-hash"></i> Quantity</th>
+                    <th><i class="bi bi-calculator"></i> Subtotal</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in cart_items %}
+                <tr onclick="window.location.href='{% url 'product_detail' item.product.id %}'" style="cursor: pointer;">
+                    <td>
+                        {% if item.product.image %}
+                            <img src="{{ item.product.image.url }}" class="product-img" alt="{{ item.product.name }}">
+                        {% else %}
+                            <img src="https://via.placeholder.com/70x70" class="product-img" alt="No image">
+                        {% endif %}
+                    </td>
+                    <td class="product-name"><strong>{{ item.product.name }}</strong></td>
+                    <td class="product-price"><strong>{{ item.product.price }} RWF</strong></td>
+                    <td class="product-quantity"><strong>x {{ item.quantity }}</strong></td>
+                    <td class="product-subtotal"><strong>{{ item.product.price|floatformat:2 }} RWF</strong></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <div class="total-box">
+        <i class="bi bi-credit-card"></i> <strong>Total:</strong> <span class="total-amount">{{ total_price }} RWF</span>
+    </div>
+
+    <br>
+
+    <div class="d-flex justify-content-between flex-wrap gap-3">
+        <a class="btn-continue" href="{% url 'home' %}">
+            <i class="bi bi-arrow-left"></i> Continue Shopping
+        </a>
+        <a href="{% url 'payment_selection' %}" class="btn-checkout">
+            Proceed to Checkout <i class="bi bi-arrow-right-circle"></i>
+        </a>
+    </div>
+
+    {% else %}
+
+    <div class="text-center py-5">
+        <i class="bi bi-cart-x" style="font-size: 5rem; color: rgba(255,255,255,0.4);"></i>
+        <p class="mt-3 fs-5">Your cart is empty.</p>
+        <a class="btn btn-primary mt-2" href="{% url 'home' %}">
+            <i class="bi bi-shop"></i> Start Shopping
+        </a>
+    </div>
+
+    {% endif %}
+
+</div>
+
+{% include 'screeNova/footer.html' %}
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>

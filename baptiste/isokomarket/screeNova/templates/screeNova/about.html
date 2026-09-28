@@ -1,0 +1,839 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us | displaystore - Rwanda's Premier Marketplace</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <style>
+        :root {
+            --primary: #0b5ed7;
+            --primary-dark: #084298;
+            --accent: #0099ff;
+            --secondary: #ffdd00;
+            --link-blue: #3a86ff;
+            --link-hover: #00d4ff;
+            --blue-container: rgba(59, 130, 246, 0.85);
+            --blue-container-hover: rgba(59, 130, 246, 0.95);
+            --hero-blue: rgba(11, 94, 215, 0.92);
+            --hero-blue-dark: rgba(8, 66, 152, 0.95);
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            background: #0a0a0a;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        /* Same background as home page - UNCHANGED */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: url('https://images.unsplash.com/photo-1587831990711-23ca6441447b?w=1600&q=80');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            opacity: 0.4;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(10, 10, 10, 0.6) 0%, rgba(30, 30, 30, 0.7) 100%);
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        /* All content above background */
+        .navbar, .container, .footer {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Navbar styling like home */
+        .navbar {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%) !important;
+            backdrop-filter: blur(10px);
+            z-index: 1050 !important;
+        }
+
+        .navbar-brand {
+            font-weight: 800;
+            color: var(--secondary) !important;
+            font-size: 1.5rem;
+        }
+
+        .nav-link {
+            color: #ffffff !important;
+            font-weight: 500;
+            transition: 0.3s;
+        }
+
+        .nav-link:hover {
+            color: var(--secondary) !important;
+            transform: translateY(-2px);
+        }
+
+        /* ========== BLUE HERO SECTION ========== */
+        
+        .about-hero {
+            background: linear-gradient(135deg, var(--hero-blue) 0%, var(--hero-blue-dark) 100%) !important;
+            backdrop-filter: blur(5px);
+            color: white !important;
+            padding: 80px 0;
+            text-align: center;
+            margin-bottom: 50px;
+            border-radius: 1rem;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+            border: 1px solid rgba(255,255,255,0.3);
+        }
+        
+        .about-hero h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            margin-bottom: 20px;
+            animation: fadeInDown 0.8s ease;
+            color: white !important;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .about-hero h1 i {
+            color: white !important;
+        }
+        
+        .about-hero p {
+            font-size: 1.2rem;
+            animation: fadeInUp 0.8s ease;
+            color: white !important;
+            font-weight: 500;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+        }
+        
+        .about-hero .lead {
+            color: white !important;
+            font-weight: 600;
+        }
+
+        /* ========== BLUE CTA SECTION ========== */
+        
+        .cta-section {
+            background: linear-gradient(135deg, var(--hero-blue) 0%, var(--hero-blue-dark) 100%) !important;
+            backdrop-filter: blur(10px);
+            padding: 60px 0;
+            text-align: center;
+            border-radius: 1rem;
+            margin-bottom: 30px;
+            border: 1px solid rgba(255,255,255,0.3);
+            transition: all 0.3s;
+        }
+        
+        .cta-section:hover {
+            background: linear-gradient(135deg, var(--hero-blue-dark) 0%, var(--hero-blue) 100%) !important;
+            box-shadow: 0 0 40px rgba(11, 94, 215, 0.6);
+            transform: scale(1.02);
+        }
+        
+        .cta-section h2 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+            color: white !important;
+            font-weight: 800;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+        }
+        
+        .cta-section p {
+            color: white !important;
+            font-weight: 500;
+            font-size: 1.1rem;
+        }
+        
+        /* Buttons inside CTA section */
+        .cta-section .btn-light {
+            background: white !important;
+            color: var(--primary) !important;
+            border: none;
+            padding: 12px 30px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin: 0 10px;
+            transition: all 0.3s;
+            border-radius: 8px;
+        }
+        
+        .cta-section .btn-light:hover {
+            background: var(--secondary) !important;
+            color: #000 !important;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+        }
+        
+        .cta-section .btn-outline-light {
+            border: 2px solid white !important;
+            color: white !important;
+            background: transparent;
+            padding: 12px 30px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin: 0 10px;
+            transition: all 0.3s;
+            border-radius: 8px;
+        }
+        
+        .cta-section .btn-outline-light:hover {
+            background: white !important;
+            color: var(--primary) !important;
+            transform: translateY(-3px);
+            border-color: white !important;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+        }
+
+        /* ========== OTHER BLUE CONTAINERS ========== */
+        
+        .feature-card {
+            text-align: center;
+            padding: 30px;
+            border-radius: 15px;
+            transition: all 0.3s;
+            background: var(--blue-container) !important;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            margin-bottom: 30px;
+        }
+        
+        .feature-card:hover {
+            background: var(--blue-container-hover) !important;
+            transform: translateY(-5px);
+            box-shadow: 0 0 25px rgba(59, 130, 246, 0.5);
+        }
+        
+        .stat-card {
+            text-align: center;
+            padding: 30px;
+            border-radius: 15px;
+            transition: transform 0.3s;
+            background: var(--blue-container) !important;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-10px);
+            background: var(--blue-container-hover) !important;
+            box-shadow: 0 0 25px rgba(59, 130, 246, 0.5);
+        }
+        
+        .team-card {
+            text-align: center;
+            background: var(--blue-container) !important;
+            backdrop-filter: blur(10px);
+            padding: 30px;
+            border-radius: 20px;
+            transition: transform 0.3s;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+        }
+        
+        .team-card:hover {
+            transform: translateY(-10px);
+            background: var(--blue-container-hover) !important;
+            box-shadow: 0 0 25px rgba(59, 130, 246, 0.5);
+        }
+        
+        .mv-card {
+            background: var(--blue-container) !important;
+            backdrop-filter: blur(10px);
+            padding: 35px;
+            border-radius: 20px;
+            height: 100%;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            transition: transform 0.3s;
+        }
+        
+        .mv-card:hover {
+            transform: translateY(-5px);
+            background: var(--blue-container-hover) !important;
+            box-shadow: 0 0 25px rgba(59, 130, 246, 0.4);
+        }
+        
+        /* Dark containers for non-link sections */
+        .mission-vision .d-flex {
+            background: rgba(30, 30, 40, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 20px;
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s;
+        }
+        
+        .mission-vision .d-flex:hover {
+            background: rgba(40, 40, 50, 0.98);
+            border-color: var(--link-blue);
+            transform: translateX(5px);
+        }
+        
+        /* ========== LINK STYLES ========== */
+        
+        a:not(.navbar-brand):not(.nav-link):not(.btn):not(.social-icons a) {
+            color: #ffffff !important;
+            text-decoration: underline;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        a:not(.navbar-brand):not(.nav-link):not(.btn):not(.social-icons a):hover {
+            color: var(--secondary) !important;
+            text-shadow: 0 0 5px rgba(255, 221, 0, 0.5);
+        }
+        
+        .footer a {
+            color: var(--link-blue) !important;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        
+        .footer a:hover {
+            color: var(--link-hover) !important;
+            text-decoration: underline;
+        }
+        
+        .social-icons a {
+            color: white !important;
+            background: rgba(59, 130, 246, 0.3);
+            border: 1px solid var(--link-blue);
+        }
+        
+        .social-icons a:hover {
+            background: var(--link-blue);
+            color: white !important;
+        }
+        
+        .btn {
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border-radius: 8px;
+        }
+        
+        .btn-outline-light {
+            border: 2px solid white !important;
+            color: white !important;
+            background: transparent;
+        }
+        
+        .btn-outline-light:hover {
+            background: white !important;
+            color: var(--primary) !important;
+            transform: translateY(-2px);
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
+        }
+        
+        .btn-warning {
+            background: var(--secondary) !important;
+            color: #000 !important;
+            font-weight: 700;
+        }
+        
+        .btn-warning:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 15px rgba(255, 221, 0, 0.5);
+        }
+        
+        .section-title h2 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: white;
+            position: relative;
+            display: inline-block;
+            padding-bottom: 15px;
+        }
+        
+        .section-title h2:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 3px;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            border-radius: 3px;
+        }
+        
+        .section-title p {
+            color: rgba(255, 255, 255, 0.8);
+        }
+        
+        .stat-number {
+            font-size: 3rem;
+            font-weight: 800;
+            color: var(--secondary);
+            margin-bottom: 10px;
+            text-shadow: 0 0 10px rgba(0,0,0,0.3);
+        }
+        
+        .stat-label {
+            font-size: 1.1rem;
+            color: rgba(255, 255, 255, 0.95);
+            font-weight: 500;
+        }
+        
+        .mv-icon {
+            font-size: 3rem;
+            color: var(--secondary);
+            margin-bottom: 20px;
+        }
+        
+        .mv-card h3, .feature-card h4, .team-card h4 {
+            color: white;
+            font-weight: 700;
+        }
+        
+        .mv-card p, .feature-card p, .team-card p {
+            color: rgba(255, 255, 255, 0.9);
+        }
+        
+        .team-card p {
+            color: var(--secondary);
+            font-weight: 500;
+        }
+        
+        .team-icon {
+            width: 120px;
+            height: 120px;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            box-shadow: 0 0 15px rgba(59, 130, 246, 0.5);
+        }
+        
+        .team-icon i {
+            font-size: 3rem;
+            color: white;
+        }
+        
+        .feature-icon {
+            font-size: 2.5rem;
+            color: var(--secondary);
+            margin-bottom: 20px;
+            transition: color 0.3s;
+        }
+        
+        .footer {
+            background: linear-gradient(135deg, rgba(26, 29, 32, 0.98), rgba(15, 17, 20, 0.98));
+            color: #ffffff;
+            padding: 50px 0 20px;
+            margin-top: auto;
+            backdrop-filter: blur(10px);
+            border-top: 1px solid rgba(59, 130, 246, 0.3);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary), var(--accent), var(--secondary));
+        }
+        
+        .footer h5, .footer h6 {
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: var(--accent);
+        }
+        
+        .bi-credit-card, .bi-phone, .bi-bank, .bi-cash-stack {
+            filter: drop-shadow(0 0 8px rgba(0, 212, 255, 0.5));
+        }
+        
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .about-hero h1 {
+                font-size: 2rem;
+            }
+            .stat-number {
+                font-size: 2rem;
+            }
+            .cta-section .btn-light,
+            .cta-section .btn-outline-light {
+                margin: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-dark">
+    <div class="container">
+        <a class="navbar-brand" href="{% url 'home' %}">displaystore</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav me-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'home' %}"><i class="bi bi-house"></i> Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" href="{% url 'about_us' %}"><i class="bi bi-info-circle"></i> About</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'contact' %}"><i class="bi bi-envelope"></i> Contact</a>
+                </li>
+            </ul>
+            <ul class="navbar-nav">
+                {% if user.is_authenticated %}
+                    <li class="nav-item">
+                        <span class="navbar-text text-white me-2">Welcome, {{ user.username }}!</span>
+                    </li>
+                    <li class="nav-item">
+                        <a class="btn btn-outline-light btn-sm" href="{% url 'store_logout' %}">Logout</a>
+                    </li>
+                {% else %}
+                    <li class="nav-item me-2">
+                        <a class="btn btn-outline-light btn-sm" href="{% url 'login' %}">Sign In</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="btn btn-warning btn-sm" href="{% url 'signup' %}">Sign Up</a>
+                    </li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- Hero Section - BLUE now -->
+<div class="about-hero">
+    <div class="container">
+        <h1><i class="bi bi-bag-check"></i> About displaystore</h1>
+        <p class="lead">Rwanda's Premier Online Marketplace Connecting Buyers and Sellers</p>
+    </div>
+</div>
+
+<!-- Stats Section - BLUE -->
+<div class="stats-section">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-3 mb-4">
+                <div class="stat-card">
+                    <div class="stat-number">500+</div>
+                    <div class="stat-label">Happy Customers</div>
+                </div>
+            </div>
+            <div class="col-md-3 mb-4">
+                <div class="stat-card">
+                    <div class="stat-number">1000+</div>
+                    <div class="stat-label">Products Sold</div>
+                </div>
+            </div>
+            <div class="col-md-3 mb-4">
+                <div class="stat-card">
+                    <div class="stat-number">50+</div>
+                    <div class="stat-label">Active Sellers</div>
+                </div>
+            </div>
+            <div class="col-md-3 mb-4">
+                <div class="stat-card">
+                    <div class="stat-number">4.8★</div>
+                    <div class="stat-label">Customer Rating</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Mission & Vision - BLUE -->
+<div class="mission-vision">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 mb-4">
+                <div class="mv-card">
+                    <div class="mv-icon">
+                        <i class="bi bi-rocket"></i>
+                    </div>
+                    <h3>Our Mission</h3>
+                    <p>To empower local businesses and individuals in Rwanda by providing a seamless, secure, and accessible online marketplace that connects buyers with quality products and reliable sellers.</p>
+                </div>
+            </div>
+            <div class="col-md-6 mb-4">
+                <div class="mv-card">
+                    <div class="mv-icon">
+                        <i class="bi bi-eye"></i>
+                    </div>
+                    <h3>Our Vision</h3>
+                    <p>To become Rwanda's most trusted and innovative e-commerce platform, driving digital transformation in retail and creating economic opportunities for all Rwandans.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Core Values - BLUE -->
+<div class="features-section">
+    <div class="container">
+        <div class="section-title">
+            <h2>Our Core Values</h2>
+            <p>The principles that guide everything we do</p>
+        </div>
+        <div class="row">
+            <div class="col-md-4">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="bi bi-shield-check"></i>
+                    </div>
+                    <h4>Trust & Security</h4>
+                    <p>Your safety is our priority. We ensure secure transactions and protect your data with enterprise-grade security.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="bi bi-people"></i>
+                    </div>
+                    <h4>Community First</h4>
+                    <p>We're building a marketplace that benefits local entrepreneurs and creates meaningful connections.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="bi bi-lightbulb"></i>
+                    </div>
+                    <h4>Innovation</h4>
+                    <p>Constantly evolving with new features to make buying and selling easier, faster, and more enjoyable.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- What You Can Do - BLUE -->
+<div class="mission-vision">
+    <div class="container">
+        <div class="section-title">
+            <h2>What You Can Do on displaystore</h2>
+        </div>
+        <div class="row">
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="bi bi-search"></i>
+                    </div>
+                    <h4>Browse & Search</h4>
+                    <p>Explore thousands of products across multiple categories with advanced search filters.</p>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="bi bi-cart"></i>
+                    </div>
+                    <h4>Easy Shopping</h4>
+                    <p>Add items to cart, choose payment methods, and checkout securely in minutes.</p>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="bi bi-shop"></i>
+                    </div>
+                    <h4>Sell Products</h4>
+                    <p>Register as a seller, list your products, and reach thousands of potential customers.</p>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="bi bi-truck"></i>
+                    </div>
+                    <h4>Fast Delivery</h4>
+                    <p>Reliable delivery across Rwanda with real-time order tracking and updates.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Payment Methods -->
+<div class="features-section">
+    <div class="container">
+        <div class="section-title">
+            <h2>Flexible Payment Options</h2>
+            <p>Choose the payment method that works best for you</p>
+        </div>
+        <div class="row text-center">
+            <div class="col-md-3 col-6 mb-3">
+                <i class="bi bi-credit-card fs-1" style="color: var(--accent);"></i>
+                <p class="mt-2 fw-bold text-white">Credit Card</p>
+            </div>
+            <div class="col-md-3 col-6 mb-3">
+                <i class="bi bi-phone fs-1" style="color: var(--secondary);"></i>
+                <p class="mt-2 fw-bold text-white">Mobile Money</p>
+            </div>
+            <div class="col-md-3 col-6 mb-3">
+                <i class="bi bi-bank fs-1" style="color: var(--accent);"></i>
+                <p class="mt-2 fw-bold text-white">Bank Transfer</p>
+            </div>
+            <div class="col-md-3 col-6 mb-3">
+                <i class="bi bi-cash-stack fs-1" style="color: var(--secondary);"></i>
+                <p class="mt-2 fw-bold text-white">Cash on Delivery</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Why Choose Us - DARK -->
+<div class="mission-vision">
+    <div class="container">
+        <div class="section-title">
+            <h2>Why Choose displaystore?</h2>
+        </div>
+        <div class="row">
+            <div class="col-md-6 mb-4">
+                <div class="d-flex">
+                    <i class="bi bi-check-circle-fill fs-3 me-3" style="color: var(--accent);"></i>
+                    <div>
+                        <h5 class="text-white">100% Rwandan Owned</h5>
+                        <p class="text-white-50">Proudly supporting local businesses and entrepreneurs across Rwanda.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 mb-4">
+                <div class="d-flex">
+                    <i class="bi bi-check-circle-fill fs-3 me-3" style="color: var(--accent);"></i>
+                    <div>
+                        <h5 class="text-white">Secure Payments</h5>
+                        <p class="text-white-50">SSL encrypted transactions with multiple secure payment gateways.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 mb-4">
+                <div class="d-flex">
+                    <i class="bi bi-check-circle-fill fs-3 me-3" style="color: var(--accent);"></i>
+                    <div>
+                        <h5 class="text-white">24/7 Customer Support</h5>
+                        <p class="text-white-50">Dedicated support team ready to assist you anytime, anywhere.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 mb-4">
+                <div class="d-flex">
+                    <i class="bi bi-check-circle-fill fs-3 me-3" style="color: var(--accent);"></i>
+                    <div>
+                        <h5 class="text-white">Best Price Guarantee</h5>
+                        <p class="text-white-50">Competitive prices with regular deals and discounts for our customers.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Team Section - BLUE -->
+<div class="team-section">
+    <div class="container">
+        <div class="section-title">
+            <h2>Meet Our Leadership</h2>
+            <p>The passionate team behind displaystore</p>
+        </div>
+        <div class="row">
+            <div class="col-md-4 mb-4">
+                <div class="team-card">
+                    <div class="team-icon">
+                        <i class="bi bi-person-circle"></i>
+                    </div>
+                    <h4>Jean Baptiste</h4>
+                    <p>Founder & CEO</p>
+                    <small>Visionary leader driving e-commerce innovation in Rwanda</small>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="team-card">
+                    <div class="team-icon">
+                        <i class="bi bi-person-circle"></i>
+                    </div>
+                    <h4>PATIENCE</h4>
+                    <p>Operations Manager</p>
+                    <small>Ensuring smooth operations and customer satisfaction</small>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="team-card">
+                    <div class="team-icon">
+                        <i class="bi bi-person-circle"></i>
+                    </div>
+                    <h4>KWIZERA KIMBI</h4>
+                    <p>Technical Lead</p>
+                    <small>Building robust and scalable marketplace technology</small>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- CTA Section - BLUE now -->
+<div class="cta-section">
+    <div class="container">
+        <h2>Ready to Start Your Journey?</h2>
+        <p class="mb-4">Join thousands of happy buyers and sellers on displaystore today!</p>
+        {% if not user.is_authenticated %}
+            <a href="{% url 'signup' %}" class="btn btn-light btn-lg">Sign Up Now</a>
+            <a href="{% url 'login' %}" class="btn btn-outline-light btn-lg">Sign In</a>
+        {% else %}
+            <a href="{% url 'home' %}" class="btn btn-light btn-lg">Start Shopping</a>
+            {% if user.profile.user_type == 'seller' %}
+                <a href="{% url 'add_product' %}" class="btn btn-outline-light btn-lg">Add Product</a>
+            {% endif %}
+        {% endif %}
+    </div>
+</div>
+
+{% include 'screeNova/footer.html' %}
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
